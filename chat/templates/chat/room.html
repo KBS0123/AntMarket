@@ -1,0 +1,51 @@
+<!-- templates/chat/room.html -->
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>채팅방</title>
+</head>
+<body>
+    <h1>채팅방: {{ room_name }}</h1>
+    <button id="open-popup">팝업으로 채팅하기</button>
+    <div id="chat-log"></div>
+    <input id="chat-message-input" type="text" size="100">
+    <input id="chat-message-submit" type="button" value="Send">
+    <script>
+        const roomName = "{{ room_name }}";
+        const chatSocket = new WebSocket(
+            'ws://' + window.location.host + '/ws/chat/' + roomName + '/'
+        );
+
+        chatSocket.onmessage = function(e) {
+            const data = JSON.parse(e.data);
+            document.querySelector('#chat-log').value += (data.message + '\n');
+        };
+
+        chatSocket.onclose = function(e) {
+            console.error('Chat socket closed unexpectedly');
+        };
+
+        document.querySelector('#chat-message-input').focus();
+        document.querySelector('#chat-message-input').onkeyup = function(e) {
+            if (e.keyCode === 13) {  // Enter 키
+                document.querySelector('#chat-message-submit').click();
+            }
+        };
+
+        document.querySelector('#chat-message-submit').onclick = function(e) {
+            const messageInputDom = document.querySelector('#chat-message-input');
+            const message = messageInputDom.value;
+            chatSocket.send(JSON.stringify({
+                'message': message
+            }));
+            messageInputDom.value = '';
+        };
+
+        document.querySelector('#open-popup').onclick = function(e) {
+            const popup = window.open('/chat/popup/' + roomName + '/', 'chatPopup', 'width=600,height=400');
+            popup.focus();
+        };
+    </script>
+</body>
+</html>
