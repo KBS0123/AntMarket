@@ -30,6 +30,8 @@ INSTALLED_APPS = [
     'cart.apps.CartConfig',
     'orders.apps.OrdersConfig',
     'payment.apps.PaymentConfig',
+    'channels', # 채팅 앱 용 앱
+    'chat', # 추가
 ]
 
 MIDDLEWARE = [
@@ -114,3 +116,16 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# 채널 레이어 설정 @조
+ASGI_APPLICATION = 'myshop.asgi.application'
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels.layers.InMemoryChannelLayer',  # 개발용 인메모리 채널 레이어
+    },
+}
+
+# 인증 백엔드 설정 @조
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',  # 기본 인증 백엔드
+)
