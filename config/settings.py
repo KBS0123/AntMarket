@@ -118,7 +118,7 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # 채널 레이어 설정 @조
-ASGI_APPLICATION = 'myshop.asgi.application'
+ASGI_APPLICATION = 'config.asgi.application'
 CHANNEL_LAYERS = {
     'default': {
         'BACKEND': 'channels.layers.InMemoryChannelLayer',  # 개발용 인메모리 채널 레이어
