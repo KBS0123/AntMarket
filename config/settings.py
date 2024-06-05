@@ -129,3 +129,7 @@ CHANNEL_LAYERS = {
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',  # 기본 인증 백엔드
 )
+
+
+#로그인 성공후 이동하는 URL
+LOGIN_REDIRECT_URL = '/'
