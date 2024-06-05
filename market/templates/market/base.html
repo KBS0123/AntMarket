@@ -1,0 +1,33 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- bootstrap -->
+    <link rel="stylesheet" type="text/css" href="{% static 'bootstrap.min.css'%}">
+    <!-- pybo CSS -->
+    <link rel="stylesheet" type="text/css" href="{% static 'style.css'%}">
+    <title>
+        {% block title %}
+        {% endblock %}
+    </title>
+</head>
+<body>
+
+<!-- navbar -->
+{% include 'market/navbar.html' %}
+
+<!-- 기본 탬플릿 안에 삽입될 내용 -->
+{% block content %}
+{% endblock %}
+
+<!-- Bootstrap JS -->
+<script src="{% static 'bootstrap.min.js' %}"></script>
+
+<!-- 자바스크립트 -->
+{% block script %}
+{% endblock %}
+
+</body>
+</html>
