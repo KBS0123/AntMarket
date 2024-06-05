@@ -1,14 +1,16 @@
-<!-- templates/chat/room.html -->
-
 <!DOCTYPE html>
 <html>
 <head>
-    <title>채팅방</title>
+    <title>채팅방: {{ room_name }}</title>
 </head>
 <body>
     <h1>채팅방: {{ room_name }}</h1>
-    <button id="open-popup">팝업으로 채팅하기</button>
-    <div id="chat-log"></div>
+    <div id="chat-log">
+        <!-- 채팅 로그를 표시할 공간 -->
+        {% for message in messages %}
+            <div><strong>{{ message.user.username }}:</strong> {{ message.content }}</div>
+        {% endfor %}
+    </div>
     <input id="chat-message-input" type="text" size="100">
     <input id="chat-message-submit" type="button" value="Send">
     <script>
@@ -19,7 +21,9 @@
 
         chatSocket.onmessage = function(e) {
             const data = JSON.parse(e.data);
-            document.querySelector('#chat-log').value += (data.message + '\n');
+            const messageElement = document.createElement('div');
+            messageElement.innerHTML = `<strong>${data.username}:</strong> ${data.message}`;
+            document.querySelector('#chat-log').appendChild(messageElement);
         };
 
         chatSocket.onclose = function(e) {
@@ -40,11 +44,6 @@
                 'message': message
             }));
             messageInputDom.value = '';
-        };
-
-        document.querySelector('#open-popup').onclick = function(e) {
-            const popup = window.open('/chat/popup/' + roomName + '/', 'chatPopup', 'width=600,height=400');
-            popup.focus();
         };
     </script>
 </body>
