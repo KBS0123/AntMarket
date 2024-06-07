@@ -36,7 +36,7 @@ class Product(models.Model):
     minicategory = models.ForeignKey(MiniCategory, on_delete=models.CASCADE)
     name = models.CharField(max_length=200)
     slug = models.SlugField(max_length=200, allow_unicode=True)
-    image = models.ImageField(upload_to='products/%Y/%m/%d/', blank=True)
+    image = models.ImageField(upload_to='media/products/%Y/%m/%d/', blank=True)
     description = models.TextField(blank=True)
     price = models.DecimalField(max_digits=10, decimal_places=2)
     available = models.BooleanField(default=True)
