@@ -2,7 +2,8 @@
 from django.urls import path
 from . import views
 
+app_name = 'chat'
+
 urlpatterns = [
-    path('<str:room_name>/', views.room, name='room'),
-    path('popup/<str:room_name>/', views.popup, name='popup'),
+    path('room/<int:course_id>/', views.course_chat_room, name='course_chat_room'),
 ]

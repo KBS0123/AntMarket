@@ -119,17 +119,17 @@ STATIC_ROOT = BASE_DIR / 'static'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # 채널 레이어 설정 @조
-ASGI_APPLICATION = 'config.asgi.application'
+ASGI_APPLICATION = 'config.routing.application'
 CHANNEL_LAYERS = {
     'default': {
-        'BACKEND': 'channels.layers.InMemoryChannelLayer',  # 개발용 인메모리 채널 레이어
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            'hosts': [('127.0.0.1', 6379)],
+        },
     },
 }
 
-# 인증 백엔드 설정 @조
-AUTHENTICATION_BACKENDS = (
-    'django.contrib.auth.backends.ModelBackend',  # 기본 인증 백엔드
-)
+
 
 
 #로그인 성공후 이동하는 URL
