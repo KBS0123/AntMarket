@@ -24,6 +24,25 @@
                     <a class="nav-link" href="{% url 'user:signup' %}">회원가입</a>
                     {% endif %}
                 </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        카테고리
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <div class="row">
+                            {% for category in categories %}
+                            <div class="col-md-3">
+                                <h3>{{ category.name }}</h3>
+                                <ul>
+                                    {% for mc in category.minicategory_set.all %}
+                                    <li><a href="{{ mc.get_absolute_url }}">{{ mc.name }}</a></li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </ul>
+                </li>
             </ul>
         </div>
     </div>
