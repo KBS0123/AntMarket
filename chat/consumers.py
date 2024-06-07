@@ -1,7 +1,8 @@
 import json
 from channels.generic.websocket import AsyncWebsocketConsumer
-from asgiref.sync import async_to_sync
 from django.utils import timezone
+from .models import ChatMessage
+from asgiref.sync import sync_to_async
 
 class ChatConsumer(AsyncWebsocketConsumer):
     async def connect(self):
@@ -26,6 +27,14 @@ class ChatConsumer(AsyncWebsocketConsumer):
         text_data_json = json.loads(text_data)
         message = text_data_json['message']
         now = timezone.now()
+
+        # Save message to the database
+        await sync_to_async(ChatMessage.objects.create)(
+            user=self.user,
+            market_id=self.id,
+            message=message,
+            timestamp=now,
+        )
         #그룹에 메시지 전송
         await self.channel_layer.group_send(
             self.room_group_name,
