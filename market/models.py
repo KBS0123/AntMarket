@@ -28,10 +28,14 @@ class MiniCategory(models.Model):
     def __str__(self):
         return self.name
 
+    def get_absolute_url(self):
+        return reverse('market:product_list', args=[self.category.slug, self.slug])
+
 class Product(models.Model):
-    category = models.ForeignKey(MiniCategory, on_delete=models.CASCADE)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, default=1)
+    minicategory = models.ForeignKey(MiniCategory, on_delete=models.CASCADE)
     name = models.CharField(max_length=200)
-    slug = models.SlugField(max_length=200)
+    slug = models.SlugField(max_length=200, allow_unicode=True)
     image = models.ImageField(upload_to='products/%Y/%m/%d/', blank=True)
     description = models.TextField(blank=True)
     price = models.DecimalField(max_digits=10, decimal_places=2)
@@ -49,6 +53,9 @@ class Product(models.Model):
 
     def __str__(self):
         return self.name
+
+    def get_absolute_url(self):
+        return reverse('market:product_detail', args=[self.category.slug, self.minicategory.slug, self.slug])
 
 class Market(models.Model):
     title = models.CharField(max_length=200)

@@ -18,9 +18,15 @@
 <!-- navbar -->
 {% include 'market/navbar.html' %}
 
-<!-- 기본 탬플릿 안에 삽입될 내용 -->
-{% block content %}
-{% endblock %}
+<div id="subheader">
+    <div class="cart">
+        Your cart is empty.
+    </div>
+</div>
+<div id="content">
+    {% block content %}
+    {% endblock %}
+</div>
 
 <!-- Bootstrap JS -->
 <script src="{% static 'bootstrap.min.js' %}"></script>

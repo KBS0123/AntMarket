@@ -1,0 +1,45 @@
+{% extends 'market/base.html' %}
+{% load static %}
+{% block title %}
+    {% if minicategory %}
+        {{ minicategory.name }}
+    {% else %}
+        Products
+    {% endif %}
+{% endblock %}
+{% block content %}
+    <div id="sidebar">
+        <h3>Minicategories</h3>
+        <ul>
+            {% for mc in minicategories %}
+                <li {% if minicategory.slug == mc.slug %} class="selected" {% endif %}>
+                    <a href="{{ mc.get_absolute_url }}">{{ mc.name }}</a>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+    <div id="main" class="product-list">
+        <h1>
+            {% if minicategory %}
+                {{ minicategory.name }}
+            {% else %}
+                Products
+            {% endif %}
+        </h1>
+        {% for product in products %}
+            <div class="item">
+                <a href="{{ product.get_absolute_url }}">
+                    <img src="{% if product.image %}
+                                {{ product.image.url }}
+                              {% else %}
+                                {% static 'img/no_image.png' %}
+                              {% endif %}">
+                </a>
+                <br/>
+                <a href="{{ product.get_absolute_url }}">{{ product.name }}</a>
+                <br/>
+                {{ product.price }}원
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}
