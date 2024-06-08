@@ -1,5 +1,5 @@
 # market/views.py
-
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Category, MiniCategory, Product
 from .forms import ProductForm
@@ -46,6 +46,7 @@ def product_detail(request, slug, category_slug, minicategory_slug):
                       'product': product
                   })
 
+@login_required
 def product_update(request):
     if request.method == 'POST':
         form = ProductForm(request.POST, request.FILES)
