@@ -1,3 +1,5 @@
+# market/context_processors.py
+
 from .models import Category, MiniCategory
 
 def categories(request):

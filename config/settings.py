@@ -1,3 +1,5 @@
+# config/settings.py
+
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -133,9 +135,6 @@ CHANNEL_LAYERS = {
         },
     },
 }
-
-
-
 
 #로그인 성공후 이동하는 URL
 LOGIN_REDIRECT_URL = '/'
