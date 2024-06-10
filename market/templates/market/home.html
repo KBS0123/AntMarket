@@ -5,7 +5,7 @@
 {% endblock %}
 {% block content %}
     <div class="container my-3">
-        <div class="row my-3">
+        <div class="row justify-content-center align-items-center my-3">
             <div class="col-6">
                 <div class="input-group">
                     <input type="text" id="search_kw" class="form-control" value="{{ kw|default_if_none:'' }}">
@@ -15,6 +15,32 @@
                 </div>
             </div>
         </div>
+    </div>
+    <div id="carouselExampleIndicators" class="carousel slide d-flex justify-content-center align-items-center" data-bs-ride="carousel" style="width: 40%; margin: 0 auto;">
+        <div class="carousel-indicators">
+            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
+            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
+        </div>
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <img src="{% static 'img/no_image.png' %}" class="d-block w-100" alt="...">
+            </div>
+            <div class="carousel-item">
+                <img src="{% static 'img/no_image.png' %}" class="d-block w-100" alt="...">
+            </div>
+            <div class="carousel-item">
+                <img src="{% static 'img/no_image.png' %}" class="d-block w-100" alt="...">
+            </div>
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+          </button>
+          <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
     </div>
     <div id="map" style="width:500px;height:400px;"></div>
     <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=e3165d2c3e60ad707e3de1280a966975"></script>
