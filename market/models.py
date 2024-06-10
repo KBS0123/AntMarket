@@ -60,10 +60,3 @@ class Product(models.Model):
     def get_absolute_url(self):
         return reverse('market:product_detail', args=[self.category.slug, self.minicategory.slug, self.slug])
 
-class Market(models.Model):
-    title = models.CharField(max_length=200)
-    description = models.TextField()
-    created = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return self.title

@@ -1,14 +1,12 @@
+# chat/models.py
 from django.db import models
 from django.contrib.auth.models import User
 
-class ChatMessage(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    market = models.ForeignKey('market.Market', on_delete=models.CASCADE)
-    message = models.TextField()
+class Message(models.Model):
+    sender = models.ForeignKey(User, related_name='sent_messages', on_delete=models.CASCADE)
+    receiver = models.ForeignKey(User, related_name='received_messages', on_delete=models.CASCADE)
+    content = models.TextField()
     timestamp = models.DateTimeField(auto_now_add=True)
 
-    class Meta:
-        ordering = ['timestamp']
-
     def __str__(self):
-        return f"{self.user.username}: {self.message[:20]}"
+        return f'{self.sender.username} to {self.receiver.username}: {self.content}'
