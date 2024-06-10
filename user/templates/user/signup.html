@@ -1,7 +1,7 @@
 {% extends "market/base.html" %}
 {% block content %}
 <div class="container my-3">
-    <form method="post" action="{% url 'user:signup' %}">
+    <form method="post" action="{% url 'user:signup' %}" enctype="multipart/form-data">
         {% csrf_token %}
         {% include "user/form_errors.html" %}
         <div class="mb-3">
@@ -23,6 +23,10 @@
             <label for="email">이메일</label>
             <input type="text" class="form-control" name="email" id="email"
                    value="{{ form.email.value|default_if_none:'' }}">
+        </div>
+        <div class="mb-3">
+            <label for="profile_image">프로필 이미지</label>
+            <input type="file" class="form-control" name="profile_image" id="profile_image">
         </div>
         <button type="submit" class="btn btn-primary">생성하기</button>
     </form>
