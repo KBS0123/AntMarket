@@ -1,0 +1,17 @@
+{% extends "market/base.html" %}
+{% load static %}
+{% block title %}
+    Profile
+{% endblock %}
+{% block content %}
+    <h1>Profile</h1>
+    {% if user_profile and user_profile.profile_image %}
+        <img src="{{ user_profile.profile_image.url }}" alt="Profile Image" width="150">
+    {% else %}
+        <p>No profile image available.</p>
+    {% endif %}
+    <p>{{ user.email }}</p>
+    <a href="#">내가 올린 글</a>
+    <br>
+    <a href="{% url 'user:logout' %}">로그아웃</a>
+{% endblock %}
