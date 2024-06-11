@@ -2,9 +2,6 @@
 
 from pathlib import Path
 import os
-from decouple import config
-
-
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -141,9 +138,3 @@ CHANNEL_LAYERS = {
 
 #로그인 성공후 이동하는 URL
 LOGIN_REDIRECT_URL = '/'
-
-KAKAO_API_KEY = config('KAKAO_API_KEY', default='your_default_value')
-
-KAKAOPAY_REST_API_KEY = config('KAKAOPAY_REST_API_KEY')
-KAKAOPAY_ADMIN_KEY = config('KAKAOPAY_ADMIN_KEY')
-

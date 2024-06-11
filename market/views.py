@@ -41,12 +41,12 @@ def product_list(request, category_slug=None, minicategory_slug=None):
                       'products': products
                   })
 
-def product_detail(request, slug, category_slug, minicategory_slug):
+def product_detail(request, name, category_slug, minicategory_slug):
     category = None
     categories = Category.objects.all()
     minicategory = None
     minicategories = MiniCategory.objects.all()
-    product = get_object_or_404(Product, slug=slug, available=True)
+    product = get_object_or_404(Product, name=name, available=True)
 
     if category_slug and minicategory_slug:
         category = get_object_or_404(Category, slug=category_slug)
@@ -83,3 +83,8 @@ def product_update(request):
 
     return render(request, 'market/product/update.html',
                   {'form': form, 'categories': categories, 'selected_category': selected_category, 'minicategories': minicategories})
+
+def product_review(request, name):
+    product = get_object_or_404(Product, name=name, available=True)
+
+    return render(request, 'market/product/review.html', {'product':product})
