@@ -63,6 +63,7 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 'market.context_processors.categories',
                 'market.context_processors.minicategories',
+                'cart.context_processors.cart',
             ],
         },
     },
@@ -121,6 +122,8 @@ STATIC_ROOT = BASE_DIR / 'static'
 
 MEDIA_URL = 'media/'
 MEDIA_R00T = BASE_DIR / 'media'
+
+CART_SESSION_ID = 'cart'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field

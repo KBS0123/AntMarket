@@ -2,6 +2,7 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from django.db.models import Q
+from cart.forms import CartAddProductForm
 from .models import Category, MiniCategory, Product
 from .forms import ProductForm
 
@@ -47,6 +48,7 @@ def product_detail(request, name, category_slug, minicategory_slug):
     minicategory = None
     minicategories = MiniCategory.objects.all()
     product = get_object_or_404(Product, name=name, available=True)
+    cart_product_form = CartAddProductForm()
 
     if category_slug and minicategory_slug:
         category = get_object_or_404(Category, slug=category_slug)
@@ -56,7 +58,7 @@ def product_detail(request, name, category_slug, minicategory_slug):
                   {
                       'category': category, 'categories': categories,
                       'minicategory': minicategory, 'minicategories': minicategories,
-                      'product': product
+                      'product': product, 'cart_product_form': cart_product_form
                   })
 
 
