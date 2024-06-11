@@ -1,0 +1,16 @@
+{% extends "shop/base.html" %}
+{% block title %}Thank you {% endblock %}
+{% block content %}
+<h1>Thank you</h1>
+<p>Your order has been successfully completed. Your order number is
+<strong>{{order.id}}</strong>.</p>
+{% endblock %}
+
+shop/bast.html 코드 수정
+기존의 else -> elif로 수정
+
+          {% elif not order %}
+            Your cart is empty.
+          {% endif %}
+        {% endwith %}
+      </div>

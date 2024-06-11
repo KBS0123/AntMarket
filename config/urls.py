@@ -11,6 +11,9 @@ urlpatterns = [
     path('user/', include('user.urls')),
     path('chat/<str:username>/', chat_views.ChatView.as_view(), name='chat'),
     path('', include('market.urls', namespace='market')),
+    path('orders/', include('orders.urls', namespace='orders')),
+    path('kakaopay/', include('kakaopay.urls')),
+
 ]
 
 if settings.DEBUG:

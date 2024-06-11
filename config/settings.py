@@ -1,6 +1,10 @@
 # config/settings.py
 
 from pathlib import Path
+import os
+from decouple import config
+
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -34,6 +38,7 @@ INSTALLED_APPS = [
     'payment.apps.PaymentConfig',
     'channels', # 채팅 앱 용 앱
     'chat', # 추가
+    'kakaopay',
 ]
 
 MIDDLEWARE = [
@@ -136,3 +141,9 @@ CHANNEL_LAYERS = {
 
 #로그인 성공후 이동하는 URL
 LOGIN_REDIRECT_URL = '/'
+
+KAKAO_API_KEY = config('KAKAO_API_KEY', default='your_default_value')
+
+KAKAOPAY_REST_API_KEY = config('KAKAOPAY_REST_API_KEY')
+KAKAOPAY_ADMIN_KEY = config('KAKAOPAY_ADMIN_KEY')
+
