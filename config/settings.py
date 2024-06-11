@@ -2,8 +2,10 @@
 
 from pathlib import Path
 import os
-from decouple import config
+from decouple import Config
 
+# Config 객체 생성 시 repository 인자 추가
+config = Config(repository=str(Path(__file__).parent / '.env'))
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -14,12 +16,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-k+tm9=xwzyfp!3r4r7@!dm6oyd_*!e%p0fm+u8#mw%ut@4!k@h'
+SECRET_KEY = config('SECRET_KEY', default='django-insecure-k+tm9=xwzyfp!3r4r7@!dm6oyd_*!e%p0fm+u8#mw%ut@4!k@h')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = config('DEBUG', default=True, cast=bool)
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='127.0.0.1,localhost').split(',')
 
 
 # Application definition
@@ -142,8 +144,8 @@ CHANNEL_LAYERS = {
 #로그인 성공후 이동하는 URL
 LOGIN_REDIRECT_URL = '/'
 
-KAKAO_API_KEY = config('KAKAO_API_KEY', default='your_default_value')
 
-KAKAOPAY_REST_API_KEY = config('KAKAOPAY_REST_API_KEY')
+#kakaopay 설정
+KAKAOPAY_REST_API_KEY = config('KAKAOPAY_REST_API_KEY', default='your_default_value')
 KAKAOPAY_ADMIN_KEY = config('KAKAOPAY_ADMIN_KEY')
 

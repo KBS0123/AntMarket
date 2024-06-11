@@ -4,6 +4,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.db.models import Q
 from .models import Category, MiniCategory, Product
 from .forms import ProductForm
+from django.http import HttpResponse
 
 def home(request):
     return render(request, 'market/home.html')
@@ -83,3 +84,7 @@ def product_update(request):
 
     return render(request, 'market/product/update.html',
                   {'form': form, 'categories': categories, 'selected_category': selected_category, 'minicategories': minicategories})
+
+def kakaopay_callback(request):
+    # 콜백 처리 로직을 여기에 추가
+    return HttpResponse('Kakaopay callback handled')
