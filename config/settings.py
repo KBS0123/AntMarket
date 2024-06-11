@@ -130,12 +130,16 @@ CART_SESSION_ID = 'cart'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# 채널 레이어 설정 @조
+# ASGI 설정
 ASGI_APPLICATION = 'config.asgi.application'
 
+# Channels Layer 설정
 CHANNEL_LAYERS = {
-    'default': {
-        'BACKEND': 'channels.layers.InMemoryChannelLayer',
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [("127.0.0.1", 6379)],
+        },
     },
 }
 
