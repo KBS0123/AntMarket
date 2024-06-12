@@ -2,11 +2,6 @@
 
 from pathlib import Path
 import os
-from decouple import Config
-
-# Config 객체 생성 시 repository 인자 추가
-config = Config(repository=str(Path(__file__).parent / '.env'))
-
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -16,12 +11,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = config('SECRET_KEY', default='django-insecure-k+tm9=xwzyfp!3r4r7@!dm6oyd_*!e%p0fm+u8#mw%ut@4!k@h')
+SECRET_KEY = 'django-insecure-k+tm9=xwzyfp!3r4r7@!dm6oyd_*!e%p0fm+u8#mw%ut@4!k@h'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = config('DEBUG', default=True, cast=bool)
+DEBUG = True
 
-ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='127.0.0.1,localhost').split(',')
+ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -40,6 +35,11 @@ INSTALLED_APPS = [
     'payment.apps.PaymentConfig',
     'channels', # 채팅 앱 용 앱
     'chat', # 추가
+    'django.contrib.sites',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.kakao',
     'kakaopay',
 ]
 
@@ -51,6 +51,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'allauth.account.middleware.AccountMiddleware',
 ]
 
 ROOT_URLCONF = 'config.urls'
@@ -68,6 +69,7 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 'market.context_processors.categories',
                 'market.context_processors.minicategories',
+                'cart.context_processors.cart',
             ],
         },
     },
@@ -127,25 +129,35 @@ STATIC_ROOT = BASE_DIR / 'static'
 MEDIA_URL = 'media/'
 MEDIA_R00T = BASE_DIR / 'media'
 
+CART_SESSION_ID = 'cart'
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# 채널 레이어 설정 @조
+# ASGI 설정
 ASGI_APPLICATION = 'config.asgi.application'
 
+# Channels Layer 설정
 CHANNEL_LAYERS = {
-    'default': {
-        'BACKEND': 'channels.layers.InMemoryChannelLayer',
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [("127.0.0.1", 6379)],
+        },
     },
 }
 
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
+)
+
 #로그인 성공후 이동하는 URL
 LOGIN_REDIRECT_URL = '/'
+ACCOUNT_LOGOUT_REDIRECT_URL = '/'
+ACCOUNT_LOGOUT_ON_GET = True
+SOCIALACCOUNT_LOGIN_ON_GET = True
 
-
-#kakaopay 설정
-KAKAOPAY_REST_API_KEY = config('KAKAOPAY_REST_API_KEY', default='your_default_value')
-KAKAOPAY_ADMIN_KEY = config('KAKAOPAY_ADMIN_KEY')
-
+SITE_ID = 2

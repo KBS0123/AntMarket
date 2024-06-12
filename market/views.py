@@ -2,6 +2,7 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from django.db.models import Q
+from cart.forms import CartAddProductForm
 from .models import Category, MiniCategory, Product
 from .forms import ProductForm
 from django.http import HttpResponse
@@ -42,12 +43,13 @@ def product_list(request, category_slug=None, minicategory_slug=None):
                       'products': products
                   })
 
-def product_detail(request, slug, category_slug, minicategory_slug):
+def product_detail(request, name, category_slug, minicategory_slug):
     category = None
     categories = Category.objects.all()
     minicategory = None
     minicategories = MiniCategory.objects.all()
-    product = get_object_or_404(Product, slug=slug, available=True)
+    product = get_object_or_404(Product, name=name, available=True)
+    cart_product_form = CartAddProductForm()
 
     if category_slug and minicategory_slug:
         category = get_object_or_404(Category, slug=category_slug)
@@ -57,7 +59,7 @@ def product_detail(request, slug, category_slug, minicategory_slug):
                   {
                       'category': category, 'categories': categories,
                       'minicategory': minicategory, 'minicategories': minicategories,
-                      'product': product
+                      'product': product, 'cart_product_form': cart_product_form
                   })
 
 
@@ -84,6 +86,12 @@ def product_update(request):
 
     return render(request, 'market/product/update.html',
                   {'form': form, 'categories': categories, 'selected_category': selected_category, 'minicategories': minicategories})
+
+def product_review(request, name):
+    product = get_object_or_404(Product, name=name, available=True)
+
+    return render(request, 'market/product/review.html', {'product':product})
+
 
 def kakaopay_callback(request):
     # 콜백 처리 로직을 여기에 추가

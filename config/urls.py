@@ -10,12 +10,9 @@ from market import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('user/', include('user.urls')),
-    path('chat/<str:username>/', chat_views.ChatView.as_view(), name='chat'),
+    path('accounts/', include('allauth.urls')),
+    path('cart/', include('cart.urls', namespace='cart')),
+    path('chat/', include('chat.urls')),
     path('', include('market.urls', namespace='market')),
     path('orders/', include('orders.urls', namespace='orders')),
-    path('kakaopay/', include('kakaopay.urls')),
-
 ]
-
-if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
