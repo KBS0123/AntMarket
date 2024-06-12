@@ -7,11 +7,19 @@
     <h1>Room: {{ room_name }}</h1>
     <div id="chat-log" style="border:1px solid black; width:400px; height:400px; overflow:auto;">
         {% for message in messages %}
-        <div><b>{{ message.timestamp }}</b> {{ message.message }}</div>
+        <div>
+            <b>{{ message.timestamp }}</b> {{ message.message }}
+            {% if message.image %}
+                <br><img src="{{ message.image.url }}" alt="Image" style="max-width: 200px;">
+            {% endif %}
+        </div>
         {% endfor %}
     </div>
     <input id="chat-message-input" type="text" size="100">
     <input id="chat-message-submit" type="button" value="Send">
+
+    <input type="file" id="chat-image-input">
+
     <script>
         const roomName = "{{ room_name|escapejs }}";
 
@@ -23,11 +31,19 @@
         chatSocket.onmessage = function(e) {
             const data = JSON.parse(e.data);
             const chatLog = document.getElementById('chat-log');
-            const message = data.timestamp
-                ? `<b>${data.timestamp}</b> ${data.message}`
-                : data.message;
+            let message = '<div>';
 
-            chatLog.innerHTML += '<div>' + message + '</div>';
+            if (data.timestamp) {
+                message += `<b>${data.timestamp}</b> `;
+            }
+            message += data.message;
+
+            if (data.image_url) {
+                message += `<br><img src="${data.image_url}" alt="Image" style="max-width: 200px;">`;
+            }
+
+            message += '</div>';
+            chatLog.innerHTML += message;
             chatLog.scrollTop = chatLog.scrollHeight;
         };
 
@@ -43,15 +59,27 @@
         };
 
         document.getElementById('chat-message-submit').onclick = function(e) {
-    const messageInputDom = document.getElementById('chat-message-input');
-    const message = messageInputDom.value;
-    if (message) {
-        chatSocket.send(JSON.stringify({
-            'message': message
-        }));
-        messageInputDom.value = '';
-    }
-};
+            const messageInputDom = document.getElementById('chat-message-input');
+            const message = messageInputDom.value;
+            if (message) {
+                chatSocket.send(JSON.stringify({
+                    'message': message
+                }));
+                messageInputDom.value = '';
+            }
+        };
+
+        document.getElementById('chat-image-input').onchange = function(e) {
+            const file = e.target.files[0];
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                chatSocket.send(JSON.stringify({
+                    'message': '',
+                    'image': event.target.result
+                }));
+            };
+            reader.readAsDataURL(file);
+        };
     </script>
 </body>
 </html>

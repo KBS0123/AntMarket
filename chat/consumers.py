@@ -2,6 +2,8 @@ import json
 from channels.generic.websocket import AsyncWebsocketConsumer
 from channels.db import database_sync_to_async
 from .models import Message
+from django.core.files.base import ContentFile
+import base64
 
 class ChatConsumer(AsyncWebsocketConsumer):
     async def connect(self):
@@ -26,10 +28,18 @@ class ChatConsumer(AsyncWebsocketConsumer):
     # Receive message from WebSocket
     async def receive(self, text_data):
         text_data_json = json.loads(text_data)
-        message = text_data_json['message']
+        message = text_data_json.get('message', '')
+        image_data = text_data_json.get('image', '')
+
+        if image_data:
+            format, imgstr = image_data.split(';base64,')
+            ext = format.split('/')[-1]
+            image = ContentFile(base64.b64decode(imgstr), name=f'{self.room_name}_{self.channel_name}.{ext}')
+        else:
+            image = None
 
         # Save message to the database asynchronously
-        new_message = await self.save_message_to_db(message)
+        new_message = await self.save_message_to_db(message, image)
 
         # Send message to room group
         await self.channel_layer.group_send(
@@ -37,24 +47,28 @@ class ChatConsumer(AsyncWebsocketConsumer):
             {
                 'type': 'chat_message',
                 'message': message,
-                'timestamp': new_message.timestamp.strftime('%Y-%m-%d %H:%M:%S')
+                'timestamp': new_message.timestamp.strftime('%Y-%m-%d %H:%M:%S'),
+                'image_url': new_message.image.url if new_message.image else ''
             }
         )
 
     @database_sync_to_async
-    def save_message_to_db(self, message):
+    def save_message_to_db(self, message, image):
         return Message.objects.create(
             room_name=self.room_name,
-            message=message
+            message=message,
+            image=image
         )
 
     # Receive message from room group
     async def chat_message(self, event):
         message = event['message']
         timestamp = event['timestamp']
+        image_url = event.get('image_url', '')
 
         # Send message to WebSocket
         await self.send(text_data=json.dumps({
             'message': message,
-            'timestamp': timestamp
+            'timestamp': timestamp,
+            'image_url': image_url,
         }))
