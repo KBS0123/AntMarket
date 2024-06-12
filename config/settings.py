@@ -1,7 +1,6 @@
 # config/settings.py
 
 from pathlib import Path
-import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -16,12 +15,13 @@ SECRET_KEY = 'django-insecure-k+tm9=xwzyfp!3r4r7@!dm6oyd_*!e%p0fm+u8#mw%ut@4!k@h
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
 
 INSTALLED_APPS = [
+    'daphne',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -35,7 +35,6 @@ INSTALLED_APPS = [
     'payment.apps.PaymentConfig',
     'channels', # 채팅 앱 용 앱
     'chat', # 추가
-    'kakaopay',
 ]
 
 MIDDLEWARE = [
@@ -63,7 +62,6 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 'market.context_processors.categories',
                 'market.context_processors.minicategories',
-                'cart.context_processors.cart',
             ],
         },
     },
@@ -123,17 +121,14 @@ STATIC_ROOT = BASE_DIR / 'static'
 MEDIA_URL = 'media/'
 MEDIA_R00T = BASE_DIR / 'media'
 
-CART_SESSION_ID = 'cart'
-
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# ASGI 설정
+# 채널 레이어 설정 @조
 ASGI_APPLICATION = 'config.asgi.application'
 
-# Channels Layer 설정
 CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
