@@ -1,6 +1,7 @@
 # config/settings.py
 
 from pathlib import Path
+import secrets_key
 import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -22,6 +23,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'daphne',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -35,6 +37,7 @@ INSTALLED_APPS = [
     'payment.apps.PaymentConfig',
     'channels', # 채팅 앱 용 앱
     'chat', # 추가
+    'social_django',
     'django.contrib.sites',
     'allauth',
     'allauth.account',
@@ -152,6 +155,8 @@ CHANNEL_LAYERS = {
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
     'allauth.account.auth_backends.AuthenticationBackend',
+    'social_core.backends.google.GoogleOAuth2',
+    'social_core.backends.naver.NaverOAuth2',
 )
 
 #로그인 성공후 이동하는 URL
@@ -161,3 +166,10 @@ ACCOUNT_LOGOUT_ON_GET = True
 SOCIALACCOUNT_LOGIN_ON_GET = True
 
 SITE_ID = 2
+
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = secrets_key.GOOGLE_KEY
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = secrets_key.GOOGLE_SECRET
+SOCIAL_AUTH_GOOGLE_OAUTH2_REDIRECT_URI = secrets_key.GOOGLE_REDIRECT_URI
+
+SOCIAL_AUTH_NAVER_KEY = secrets_key.NAVER_KEY
+SOCIAL_AUTH_NAVER_SECRET = secrets_key.NAVER_SECRET

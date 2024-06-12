@@ -1,5 +1,7 @@
 .idea
-db.salite3
+db.sqlite3
 *.pyc
 __pycache__
+secrets_key.py
+.env
 .env
