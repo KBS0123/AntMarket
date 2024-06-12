@@ -10,6 +10,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('user/', include('user.urls')),
     path('accounts/', include('allauth.urls')),
+    path('', include('social_django.urls')),
     path('cart/', include('cart.urls', namespace='cart')),
     path('chat/', include('chat.urls')),
     path('', include('market.urls', namespace='market')),
