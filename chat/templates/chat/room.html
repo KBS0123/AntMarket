@@ -5,11 +5,14 @@
 </head>
 <body>
     <h1>Room: {{ room_name }}</h1>
-    <div id="chat-log" style="border:1px solid black; width:400px; height:400px; overflow:auto;"></div>
+    <div id="chat-log" style="border:1px solid black; width:400px; height:400px; overflow:auto;">
+        {% for message in messages %}
+        <div><b>{{ message.timestamp }}</b> {{ message.message }}</div>
+        {% endfor %}
+    </div>
     <input id="chat-message-input" type="text" size="100">
     <input id="chat-message-submit" type="button" value="Send">
     <script>
-        // room_name을 직접 할당
         const roomName = "{{ room_name|escapejs }}";
 
         const chatSocket = new WebSocket(
@@ -20,8 +23,6 @@
         chatSocket.onmessage = function(e) {
             const data = JSON.parse(e.data);
             const chatLog = document.getElementById('chat-log');
-
-            // 타임스탬프가 있는 경우와 없는 경우를 처리
             const message = data.timestamp
                 ? `<b>${data.timestamp}</b> ${data.message}`
                 : data.message;
@@ -42,13 +43,15 @@
         };
 
         document.getElementById('chat-message-submit').onclick = function(e) {
-            const messageInputDom = document.getElementById('chat-message-input');
-            const message = messageInputDom.value;
-            chatSocket.send(JSON.stringify({
-                'message': message
-            }));
-            messageInputDom.value = '';
-        };
+    const messageInputDom = document.getElementById('chat-message-input');
+    const message = messageInputDom.value;
+    if (message) {
+        chatSocket.send(JSON.stringify({
+            'message': message
+        }));
+        messageInputDom.value = '';
+    }
+};
     </script>
 </body>
 </html>
