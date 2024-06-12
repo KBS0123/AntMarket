@@ -20,7 +20,13 @@
         chatSocket.onmessage = function(e) {
             const data = JSON.parse(e.data);
             const chatLog = document.getElementById('chat-log');
-            chatLog.innerHTML += '<div>' + data.message + '</div>';
+
+            // 타임스탬프가 있는 경우와 없는 경우를 처리
+            const message = data.timestamp
+                ? `<b>${data.timestamp}</b> ${data.message}`
+                : data.message;
+
+            chatLog.innerHTML += '<div>' + message + '</div>';
             chatLog.scrollTop = chatLog.scrollHeight;
         };
 
