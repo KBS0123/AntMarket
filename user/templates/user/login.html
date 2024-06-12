@@ -1,4 +1,6 @@
 {% extends "market/base.html" %}
+{% load socialaccount %}
+{% load static %}
 {% block content %}
 <div class="container my-3">
     <form method="post" action="{% url 'user:login' %}">
@@ -15,6 +17,9 @@
             value="{{form.password.value|default_if_none:''}}">
         </div>
         <button type="submit" class="btn btn-primary">로그인</button>
+        <a href="{% provider_login_url 'kakao' %}">
+          <img src="{% static 'img/kakao_login.png' %}" alt="...">
+        </a>
     </form>
 </div>
 {% endblock %}
