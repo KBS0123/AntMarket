@@ -3,6 +3,10 @@ from django.shortcuts import render, redirect
 from user.forms import UserForm
 from .models import UserProfile
 
+def login_success(request):
+    username = request.user  # 현재 로그인된 사용자의 이름 가져오기
+    return render(request, 'market/home.html', {'username': username})
+
 def logout_view(request):
     logout(request)
     return redirect('market:home')
