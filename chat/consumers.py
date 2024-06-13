@@ -1,9 +1,10 @@
+# consumers.py
 import json
-from channels.generic.websocket import AsyncWebsocketConsumer
-from channels.db import database_sync_to_async
-from .models import Message
-from django.core.files.base import ContentFile
 import base64
+from django.core.files.base import ContentFile
+from channels.generic.websocket import AsyncWebsocketConsumer
+from asgiref.sync import sync_to_async
+from .models import Message
 
 class ChatConsumer(AsyncWebsocketConsumer):
     async def connect(self):
@@ -47,28 +48,33 @@ class ChatConsumer(AsyncWebsocketConsumer):
             {
                 'type': 'chat_message',
                 'message': message,
+                'user': new_message.user.username,  # 유저 이름 추가
                 'timestamp': new_message.timestamp.strftime('%Y-%m-%d %H:%M:%S'),
                 'image_url': new_message.image.url if new_message.image else ''
             }
         )
 
-    @database_sync_to_async
+    @sync_to_async
     def save_message_to_db(self, message, image):
+        user = self.scope['user']
         return Message.objects.create(
             room_name=self.room_name,
             message=message,
-            image=image
+            image=image,
+            user=user
         )
 
     # Receive message from room group
     async def chat_message(self, event):
         message = event['message']
+        user = event['user']  # 유저 이름 가져오기
         timestamp = event['timestamp']
         image_url = event.get('image_url', '')
 
         # Send message to WebSocket
         await self.send(text_data=json.dumps({
             'message': message,
+            'user': user,  # 유저 이름 포함
             'timestamp': timestamp,
             'image_url': image_url,
         }))

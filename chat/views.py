@@ -11,6 +11,7 @@ def room(request, room_name):
         if form.is_valid():
             message = form.save(commit=False)
             message.room_name = room_name
+            message.user = request.user  # 현재 사용자 설정
             message.save()
             return JsonResponse({'image_url': message.image.url}, status=201)
         else:

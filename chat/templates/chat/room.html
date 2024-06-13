@@ -8,7 +8,7 @@
     <div id="chat-log" style="border:1px solid black; width:400px; height:400px; overflow:auto;">
         {% for message in messages %}
         <div>
-            <b>{{ message.timestamp }}</b> {{ message.message }}
+            <b>{{ message.timestamp }} {{ message.user.username }}</b> {{ message.message }}
             {% if message.image %}
                 <br><img src="{{ message.image.url }}" alt="Image" style="max-width: 200px;">
             {% endif %}
@@ -22,6 +22,7 @@
 
     <script>
         const roomName = "{{ room_name|escapejs }}";
+        const username = "{{ request.user.username|escapejs }}";  // 현재 로그인한 사용자의 이름
 
         const chatSocket = new WebSocket(
             'ws://' + window.location.host +
@@ -34,7 +35,7 @@
             let message = '<div>';
 
             if (data.timestamp) {
-                message += `<b>${data.timestamp}</b> `;
+                message += `<b>${data.timestamp} ${data.username}</b> `;
             }
             message += data.message;
 
@@ -63,7 +64,8 @@
             const message = messageInputDom.value;
             if (message) {
                 chatSocket.send(JSON.stringify({
-                    'message': message
+                    'message': message,
+                    'username': username
                 }));
                 messageInputDom.value = '';
             }
@@ -75,7 +77,8 @@
             reader.onload = function(event) {
                 chatSocket.send(JSON.stringify({
                     'message': '',
-                    'image': event.target.result
+                    'image': event.target.result,
+                    'username': username
                 }));
             };
             reader.readAsDataURL(file);
