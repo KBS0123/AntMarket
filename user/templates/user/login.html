@@ -1,9 +1,5 @@
 {% extends "market/base.html" %}
 {% load socialaccount %}
-    <a href="{% provider_login_url 'kakao' method='oauth2' %}">
-    카카오톡 회원가입
-  </a>
-
 {% load static %}
 {% block content %}
 
@@ -181,9 +177,9 @@
             value="{{form.password.value|default_if_none:''}}">
         </div>
         <button type="submit" class="btn btn-primary">로그인</button>
-
+          <a href="{% provider_login_url 'kakao' %}">
             <img src="{% static 'img/kakao_login.png' %}" alt="...">
-
+          </a>
         <a href="{% url 'social:begin' 'naver' %}">
              <img src="{% static 'img/naver_login.png' %}" alt="..." width="25%">
         </a>
