@@ -66,6 +66,9 @@ class Product(models.Model):
     def get_absolute_url(self):
         return reverse('market:product_detail', args=[self.category.slug, self.minicategory.slug, self.name])
 
+    def get_update_url(self):
+        return reverse('market:product_update', args=[self.category.slug, self.minicategory.slug, self.name])
+
     def get_review_url(self):
         return reverse('market:product_review', args=[self.name])
 

@@ -85,21 +85,25 @@ def product_create(request, category_slug):
                           'minicategories': minicategories})
 
 
-def product_update(request, pk):
-    product = get_object_or_404(Product, pk=pk)
+def product_update(request, category_slug, minicategory_slug, name):
+    product = get_object_or_404(Product, category__slug=category_slug, minicategory__slug=minicategory_slug, name=name)
+
     if request.method == 'POST':
         form = ProductForm(request.POST, request.FILES, instance=product)
         if form.is_valid():
-            product = form.save(commit=False)
-            # 미니카테고리 필드의 queryset 설정을 위해 clean_category 메서드를 호출
-            product.clean_category()
-            product.save()
+            form.save()
             return redirect('market:product_detail', category_slug=product.category.slug,
-                            minicategory_slug=product.minicategory.slug, name=product.slug)
+                            minicategory_slug=product.minicategory.slug, name=product.name)
     else:
         form = ProductForm(instance=product)
 
-    return render(request, 'market/product/update.html', {'form': form})
+    category = product.category
+    minicategories = MiniCategory.objects.filter(category=category)
+    minicategory = product.minicategory
+
+    return render(request, 'market/product/update.html',
+                  {'form': form, 'category': category, 'product': product,
+                   'minicategories': minicategories, 'minicategory': minicategory})
 
 def product_review(request, name):
     product = get_object_or_404(Product, name=name, available=True)
