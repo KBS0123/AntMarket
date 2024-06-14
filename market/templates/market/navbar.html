@@ -87,7 +87,6 @@
         <ul class="nav justify-content-center">
             <li class="nav-item">
                 {% if user.is_authenticated %}
-                <a class="nav-link" href="{% url 'market:product_update' %}">제품 등록</a>
                 <a class="nav-link" href="{% url 'user:profile' %}">{{user.username}}</a>
                 <a class="nav-link" href="{% url 'user:logout' %}">로그아웃</a>
                 {% else %}

@@ -64,29 +64,42 @@ def product_detail(request, name, category_slug, minicategory_slug):
                       'product': product, 'cart_product_form': cart_product_form
                   })
 
-@login_required
-def product_update(request):
-    selected_category_id = request.POST.get('category')
-    selected_category = None
-    minicategories = []
 
-    if selected_category_id:
-        selected_category = get_object_or_404(Category, id=selected_category_id)
-        minicategories = selected_category.minicategory_set.all()
-
+def product_create(request, category_slug):
     if request.method == 'POST':
         form = ProductForm(request.POST, request.FILES)
         if form.is_valid():
-            form.save()
-            return redirect('market:home')  # 등록 후 홈 페이지로 이동
+            product = form.save(commit=False)
+            product.save()
+            return redirect('market:product_detail', category_slug=product.category.slug,
+                            minicategory_slug=product.minicategory.slug, name=product.name)
     else:
         form = ProductForm()
 
-    # 카테고리 목록을 템플릿으로 전달
-    categories = Category.objects.all()
+    if category_slug:
+        category = get_object_or_404(Category, slug=category_slug)
+        minicategories = MiniCategory.objects.filter(category=category)
 
-    return render(request, 'market/product/update.html',
-                  {'form': form, 'categories': categories, 'selected_category': selected_category, 'minicategories': minicategories})
+    return render(request, 'market/product/create.html',
+                  {'form': form, 'category': category,
+                          'minicategories': minicategories})
+
+
+def product_update(request, pk):
+    product = get_object_or_404(Product, pk=pk)
+    if request.method == 'POST':
+        form = ProductForm(request.POST, request.FILES, instance=product)
+        if form.is_valid():
+            product = form.save(commit=False)
+            # 미니카테고리 필드의 queryset 설정을 위해 clean_category 메서드를 호출
+            product.clean_category()
+            product.save()
+            return redirect('market:product_detail', category_slug=product.category.slug,
+                            minicategory_slug=product.minicategory.slug, name=product.slug)
+    else:
+        form = ProductForm(instance=product)
+
+    return render(request, 'market/product/update.html', {'form': form})
 
 def product_review(request, name):
     product = get_object_or_404(Product, name=name, available=True)

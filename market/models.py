@@ -20,6 +20,9 @@ class Category(models.Model):
     def get_absolute_url(self):
         return reverse('market:product_list', args=[self.slug])
 
+    def get_create_url(self):
+        return reverse('market:product_create', args=[self.slug])
+
 class MiniCategory(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     name = models.CharField(max_length=200)
