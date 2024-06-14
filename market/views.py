@@ -5,7 +5,7 @@ from django.db.models import Q
 from cart.forms import CartAddProductForm
 from .models import Category, MiniCategory, Product
 from .forms import ProductForm
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 
 def home(request):
     return render(request, 'market/home.html')
@@ -64,12 +64,15 @@ def product_detail(request, name, category_slug, minicategory_slug):
                       'product': product, 'cart_product_form': cart_product_form
                   })
 
-
 @login_required
 def product_update(request):
-    # 카테고리 목록을 템플릿으로 전달
-    categories = Category.objects.all()
-    minicategories = MiniCategory.objects.filter(category=categories)
+    selected_category_id = request.POST.get('category')
+    selected_category = None
+    minicategories = []
+
+    if selected_category_id:
+        selected_category = get_object_or_404(Category, id=selected_category_id)
+        minicategories = selected_category.minicategory_set.all()
 
     if request.method == 'POST':
         form = ProductForm(request.POST, request.FILES)
@@ -79,8 +82,11 @@ def product_update(request):
     else:
         form = ProductForm()
 
+    # 카테고리 목록을 템플릿으로 전달
+    categories = Category.objects.all()
+
     return render(request, 'market/product/update.html',
-                  {'form': form, 'categories': categories, 'minicategories': minicategories})
+                  {'form': form, 'categories': categories, 'selected_category': selected_category, 'minicategories': minicategories})
 
 def product_review(request, name):
     product = get_object_or_404(Product, name=name, available=True)
