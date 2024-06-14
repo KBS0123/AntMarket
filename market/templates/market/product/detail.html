@@ -1,4 +1,4 @@
-<!-- market/templates/market/product/list.html -->
+<!-- market/templates/market/product/books_list.html -->
 {% extends 'market/base.html' %}
 {% load static %}
 {% block title %}
@@ -26,6 +26,7 @@
         {{ product.description|linebreaks }}
     </div>
     <a href="{{ product.get_review_url }}">{{ user.username }}</a>
+    <a href="{% url 'chat:room' product.name %}">채팅</a>
     <div id="map" style="width:500px;height:400px;"></div>
     <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=e3165d2c3e60ad707e3de1280a966975"></script>
     <script>
