@@ -2,6 +2,7 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from django.db.models import Q
+from django.contrib.auth.models import User
 from cart.forms import CartAddProductForm
 from .models import Category, MiniCategory, Product
 from .forms import ProductForm
@@ -45,12 +46,12 @@ def product_list(request, category_slug=None, minicategory_slug=None):
                       'products': products
                   })
 
-def product_detail(request, name, category_slug, minicategory_slug):
+def product_detail(request, id, category_slug, minicategory_slug):
     category = None
     categories = Category.objects.all()
     minicategory = None
     minicategories = MiniCategory.objects.all()
-    product = get_object_or_404(Product, name=name, available=True)
+    product = get_object_or_404(Product, id=id, available=True)
     cart_product_form = CartAddProductForm()
 
     if category_slug and minicategory_slug:
@@ -64,36 +65,38 @@ def product_detail(request, name, category_slug, minicategory_slug):
                       'product': product, 'cart_product_form': cart_product_form
                   })
 
-
+@login_required
 def product_create(request, category_slug):
-    if request.method == 'POST':
-        form = ProductForm(request.POST, request.FILES)
-        if form.is_valid():
-            product = form.save(commit=False)
-            product.save()
-            return redirect('market:product_detail', category_slug=product.category.slug,
-                            minicategory_slug=product.minicategory.slug, name=product.name)
-    else:
-        form = ProductForm()
-
     if category_slug:
         category = get_object_or_404(Category, slug=category_slug)
         minicategories = MiniCategory.objects.filter(category=category)
+
+        if request.method == 'POST':
+            form = ProductForm(request.POST, request.FILES)
+            if form.is_valid():
+                product = form.save(commit=False)
+                product.user = request.user
+                product.category = category
+                product.save()
+                return redirect('market:product_detail', category_slug=product.category.slug,
+                                minicategory_slug=product.minicategory.slug, id=product.id)
+        else:
+            form = ProductForm()
 
     return render(request, 'market/product/create.html',
                   {'form': form, 'category': category,
                           'minicategories': minicategories})
 
 
-def product_update(request, category_slug, minicategory_slug, name):
-    product = get_object_or_404(Product, category__slug=category_slug, minicategory__slug=minicategory_slug, name=name)
+def product_update(request, category_slug, minicategory_slug, id):
+    product = get_object_or_404(Product, category__slug=category_slug, minicategory__slug=minicategory_slug, id=id)
 
     if request.method == 'POST':
         form = ProductForm(request.POST, request.FILES, instance=product)
         if form.is_valid():
             form.save()
             return redirect('market:product_detail', category_slug=product.category.slug,
-                            minicategory_slug=product.minicategory.slug, name=product.name)
+                            minicategory_slug=product.minicategory.slug, id=product.id)
     else:
         form = ProductForm(instance=product)
 
