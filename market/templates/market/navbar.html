@@ -79,9 +79,11 @@
 
 <nav class="navbar">
     <div class="cl-effect-1 px-40 px-lg-5">
-        <a href="#" class="navbar-brand d-flex align-items-center">
-            <a href="{% url 'market:home' %}"><img src="{% static 'img/Ant Market No Bg.png' %}" height="100" width="210" style="margin: 2px 5px 8px 5px"></a>
-        </a>
+        <div class="navbar-brand d-flex align-items-center">
+            <a href="{% url 'market:home' %}">
+                <img src="{% static 'img/Ant Market No Bg.png' %}" height="100" width="210" style="margin: 2px 5px 8px 5px">
+            </a>
+        </div>
         <ul class="nav justify-content-center">
             <li class="nav-item">
                 {% if user.is_authenticated %}

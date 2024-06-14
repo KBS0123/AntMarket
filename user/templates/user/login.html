@@ -168,17 +168,17 @@
       <div class="sign-in-htm">
         <form action="{% url 'user:login' %}" method="post">
           {% csrf_token %}
-        <div class="group">
-          <label for="username">ID</label>
-            <input type="text" class="form-control" name="username" id="username"
-            value="{{form.username.value|default_if_none:''}}">
-        </div>
-        <div class="group">
-          <label for="password" class="label">Password</label>
-            <input type="password" class="form-control" name="password" id="password"
-            value="{{form.password.value|default_if_none:''}}">
-        </div>
-          <button type="submit" class="btn btn-primary">로그인</button>
+          <div class="group">
+            <label for="username">ID</label>
+              <input type="text" class="form-control" name="username" id="username"
+              value="{{form.username.value|default_if_none:''}}">
+          </div>
+          <div class="group">
+            <label for="password" class="label">Password</label>
+              <input type="password" class="form-control" name="password" id="password"
+              value="{{form.password.value|default_if_none:''}}">
+          </div>
+            <button type="submit" class="btn btn-primary">로그인</button>
         </form>
           <a href="{% provider_login_url 'kakao' %}">
             <img src="{% static 'img/kakao_login.png' %}" alt="...">
