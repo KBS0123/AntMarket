@@ -1,21 +1,18 @@
 {% extends 'market/base.html' %}
 {% load static %}
 {% block title %}
-    {% if minicategory %}
-        {{ minicategory.name }}
-    {% else %}
-        Products
-    {% endif %}
+    {{ category.name }}
 {% endblock %}
 {% block content %}
     <div id="main" class="product-list">
         <h1>
-            {% if minicategory %}
-                {{ minicategory.name }}
-            {% else %}
-                Products
-            {% endif %}
+            {{ category.name }}
         </h1>
+        {% for minicategory in minicategories %}
+            <a href="{% url 'market:product_list_filtered' category.slug minicategory.slug %}">
+                {{ minicategory.name }}
+            </a>
+        {% endfor %}
         {% for product in products %}
             <div class="item">
                 <a href="{{ product.get_absolute_url }}">

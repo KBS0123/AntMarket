@@ -2,6 +2,7 @@
 
 from django.shortcuts import render
 from django.http import JsonResponse
+
 from .models import Message
 from .forms import MessageForm
 

@@ -31,12 +31,14 @@ def product_list(request, category_slug=None, minicategory_slug=None):
 
     if category_slug:
         category = get_object_or_404(Category, slug=category_slug)
+        minicategories = MiniCategory.objects.filter(category=category)
+        products = products.filter(category=category)
 
         if minicategory_slug:
             minicategory = get_object_or_404(MiniCategory, slug=minicategory_slug)
             products =products.filter(minicategory=minicategory)
 
-    return render(request, 'market/product/list.html',
+    return render(request, 'market/product/product_list.html',
                   {
                       'category': category, 'categories': categories,
                       'minicategory': minicategory, 'minicategories': minicategories,
@@ -65,13 +67,9 @@ def product_detail(request, name, category_slug, minicategory_slug):
 
 @login_required
 def product_update(request):
-    selected_category_id = request.POST.get('category')
-    selected_category = None
-    minicategories = []
-
-    if selected_category_id:
-        selected_category = get_object_or_404(Category, id=selected_category_id)
-        minicategories = selected_category.minicategory_set.all()
+    # 카테고리 목록을 템플릿으로 전달
+    categories = Category.objects.all()
+    minicategories = MiniCategory.objects.filter(category=categories)
 
     if request.method == 'POST':
         form = ProductForm(request.POST, request.FILES)
@@ -81,11 +79,8 @@ def product_update(request):
     else:
         form = ProductForm()
 
-    # 카테고리 목록을 템플릿으로 전달
-    categories = Category.objects.all()
-
     return render(request, 'market/product/update.html',
-                  {'form': form, 'categories': categories, 'selected_category': selected_category, 'minicategories': minicategories})
+                  {'form': form, 'categories': categories, 'minicategories': minicategories})
 
 def product_review(request, name):
     product = get_object_or_404(Product, name=name, available=True)
