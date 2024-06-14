@@ -42,5 +42,28 @@
         <a href="{{ product.get_update_url }}">
             <input type="button" value="수정">
         </a>
+        <button id="delete-button" class="btn btn-danger">삭제</button>
     {% endif %}
+<script>
+    document.getElementById('delete-button').addEventListener('click', function() {
+        if (confirm('이 제품을 삭제하시겠습니까?')) {
+            fetch('{% url "market:product_delete" category_slug=product.category.slug minicategory_slug=product.minicategory.slug id=product.id %}', {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}',
+                }
+            })
+            .then(response => {
+                if (response.ok) {
+                    window.location.href = '{% url "market:product_list" category_slug=product.category.slug %}';
+                } else {
+                    alert('제품 삭제에 실패했습니다.');
+                }
+            })
+            .catch(error => {
+                alert('오류가 발생했습니다. 다시 시도해 주세요.');
+            });
+        }
+    });
+</script>
 {% endblock %}

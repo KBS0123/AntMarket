@@ -2,11 +2,11 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from django.db.models import Q
-from django.contrib.auth.models import User
 from cart.forms import CartAddProductForm
 from .models import Category, MiniCategory, Product
 from .forms import ProductForm
 from django.http import HttpResponse, JsonResponse
+from django.views.decorators.http import require_POST
 
 def home(request):
     return render(request, 'market/home.html')
@@ -87,7 +87,7 @@ def product_create(request, category_slug):
                   {'form': form, 'category': category,
                           'minicategories': minicategories})
 
-
+@login_required
 def product_update(request, category_slug, minicategory_slug, id):
     product = get_object_or_404(Product, category__slug=category_slug, minicategory__slug=minicategory_slug, id=id)
 
@@ -107,6 +107,13 @@ def product_update(request, category_slug, minicategory_slug, id):
     return render(request, 'market/product/update.html',
                   {'form': form, 'category': category, 'product': product,
                    'minicategories': minicategories, 'minicategory': minicategory})
+
+@login_required
+@require_POST
+def product_delete(request, category_slug, minicategory_slug, id):
+    product = get_object_or_404(Product, category__slug=category_slug, minicategory__slug=minicategory_slug, id=id)
+    product.delete()
+    return JsonResponse({'message': 'Product deleted successfully'}, status=200)
 
 def product_review(request, name):
     product = get_object_or_404(Product, name=name, available=True)
