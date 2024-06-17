@@ -8,10 +8,9 @@
 
 {% block content %}
 <div class="container">
-    <h2>{{ product.name }} 수정</h2>
+    <h2>{{ category.name }} 제품 추가</h2>
     <form id="productForm" method="post" enctype="multipart/form-data">
         {% csrf_token %}
-        <input type="hidden" value="{{ category.name }}">
         <div class="form-group">
             <label for="minicategory">Mini Category:</label>
             <select id="minicategory" name="minicategory">
@@ -36,7 +35,7 @@
             <label for="image">Product Image:</label>
             <input type="file" id="image" name="image" class="form-control-file">
         </div>
-        <button type="submit" class="btn btn-primary">제품 수정</button>
+        <button type="submit" class="btn btn-primary">제품 추가</button>
         <a href="{% url 'market:home' %}" class="btn btn-secondary">취소</a>
     </form>
 </div>

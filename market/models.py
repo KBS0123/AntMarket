@@ -1,7 +1,7 @@
 # market/models.py
 
 from django.db import models
-from django.http import JsonResponse
+from django.contrib.auth.models import User
 from django.urls import reverse
 
 class Category(models.Model):
@@ -19,6 +19,9 @@ class Category(models.Model):
 
     def get_absolute_url(self):
         return reverse('market:product_list', args=[self.slug])
+
+    def get_create_url(self):
+        return reverse('market:product_create', args=[self.slug])
 
 class MiniCategory(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
@@ -38,6 +41,7 @@ class MiniCategory(models.Model):
         return reverse('market:product_list_filtered', args=[self.category.slug, self.slug])
 
 class Product(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     category = models.ForeignKey(Category, on_delete=models.CASCADE, default=1)
     minicategory = models.ForeignKey(MiniCategory, on_delete=models.CASCADE)
     name = models.CharField(max_length=200)
@@ -61,7 +65,10 @@ class Product(models.Model):
         return self.name
 
     def get_absolute_url(self):
-        return reverse('market:product_detail', args=[self.category.slug, self.minicategory.slug, self.name])
+        return reverse('market:product_detail', args=[self.category.slug, self.minicategory.slug, self.id])
+
+    def get_update_url(self):
+        return reverse('market:product_update', args=[self.category.slug, self.minicategory.slug, self.id])
 
     def get_review_url(self):
         return reverse('market:product_review', args=[self.name])
