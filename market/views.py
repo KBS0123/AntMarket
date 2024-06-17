@@ -9,7 +9,10 @@ from django.http import HttpResponse, JsonResponse
 from django.views.decorators.http import require_POST
 
 def home(request):
-    return render(request, 'market/home.html')
+    products = Product.objects.order_by('-created')
+
+    return render(request, 'market/home.html',
+                  {'products':products})
 
 def search(request):
     kw = request.GET.get('kw', '')  # 검색어
