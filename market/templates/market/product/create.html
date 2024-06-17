@@ -32,11 +32,75 @@
             <input type="number" id="price" name="price" class="form-control" required>
         </div>
         <div class="form-group">
+            <input type="hidden" id="latitude" name="latitude" class="form-control" readonly>
+        </div>
+        <div class="form-group">
+            <input type="hidden" id="longitude" name="longitude" class="form-control" readonly>
+        </div>
+        <div class="form-group">
             <label for="image">Product Image:</label>
             <input type="file" id="image" name="image" class="form-control-file">
         </div>
         <button type="submit" class="btn btn-primary">제품 추가</button>
         <a href="{% url 'market:home' %}" class="btn btn-secondary">취소</a>
+
+        <div id="map" style="width:500px;height:400px;"></div>
+        <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=e3165d2c3e60ad707e3de1280a966975&libraries=services"></script>
+        <script>
+            var mapContainer = document.getElementById('map'), // 지도를 표시할 div
+                mapOption = {
+                    center: new kakao.maps.LatLng(37.56646, 126.98121), // 지도의 중심좌표
+                    level: 7, // 지도의 확대 레벨
+
+                };
+
+            // 지도를 생성한다
+            var map = new kakao.maps.Map(mapContainer, mapOption);
+
+            function locationLoadSuccess(pos){
+                // 현재 위치 받아오기
+                var currentPos = new kakao.maps.LatLng(pos.coords.latitude,pos.coords.longitude);
+
+                // 지도 이동(기존 위치와 가깝다면 부드럽게 이동)
+                map.panTo(currentPos);
+
+                // 기존에 마커가 있다면 제거
+                marker.setMap(null);
+                marker.setMap(map);
+            };
+
+            // 위치 가져오기 버튼 클릭시
+            function getCurrentPosBtn(){
+                navigator.geolocation.getCurrentPosition(locationLoadSuccess);
+            };
+
+            var marker = new kakao.maps.Marker({
+                // 지도 중심좌표에 마커를 생성합니다
+                position: map.getCenter()
+            });
+
+            // 지도에 마커를 표시합니다
+            marker.setMap(map);
+
+            kakao.maps.event.addListener(map, 'click', function(mouseEvent) {
+
+                // 클릭한 위도, 경도 정보를 가져옵니다
+                var latlng = mouseEvent.latLng;
+
+                // 마커 위치를 클릭한 위치로 옮깁니다
+                marker.setPosition(latlng);
+                document.getElementById('latitude').value = latlng.getLat();
+                document.getElementById('longitude').value = latlng.getLng();
+            });
+
+        </script>
+        <button type="button" class="btn btn-lg btn-primary" id="getMyPositionBtn"
+        onclick="getCurrentPosBtn()">내 위치 가져오기</button>
+
+<!-- 부트스트랩 이용을 위한 jQuery와 CDN -->
+        <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
     </form>
 </div>
 {% endblock %}

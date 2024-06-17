@@ -1,4 +1,4 @@
-<!-- market/templates/market/product/books_list.html -->
+<!-- market/templates/market/product/detail.html -->
 {% extends 'market/base.html' %}
 {% load static %}
 {% block title %}
@@ -28,16 +28,26 @@
     <a href="{{ product.get_review_url }}">{{ product.user.username }}</a>
     <a href="{% url 'chat:room' product.name %}">채팅</a>
     <div id="map" style="width:500px;height:400px;"></div>
-    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=e3165d2c3e60ad707e3de1280a966975"></script>
-    <script>
-        var container = document.getElementById('map');
-        var options = {
-            center: new kakao.maps.LatLng(33.450701, 126.570667),
-            level: 3
-        };
+    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=e3165d2c3e60ad707e3de1280a966975&libraries=services"></script>
+<script>
+    var container = document.getElementById('map');
+    var options = {
+        center: new kakao.maps.LatLng({{ product.latitude }}, {{ product.longitude }}), // 서울 중심으로 설정
+        level: 3
+    };
 
-        var map = new kakao.maps.Map(container, options);
-    </script>
+    var map = new kakao.maps.Map(container, options);
+
+    var marker = new kakao.maps.Marker({
+        // 지도 중심좌표에 마커를 생성합니다
+        position: map.getCenter()
+    });
+
+    // 지도에 마커를 표시합니다
+    marker.setMap(map);
+
+
+</script>
     {% if user.is_authenticated and product.user.username == user.username %}
         <a href="{{ product.get_update_url }}">
             <input type="button" value="수정">
