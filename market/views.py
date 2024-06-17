@@ -9,7 +9,7 @@ from django.http import HttpResponse, JsonResponse
 from django.views.decorators.http import require_POST
 
 def home(request):
-    products = Product.objects.order_by('-created')
+    products = Product.objects.order_by('?')
 
     return render(request, 'market/home.html',
                   {'products':products})
