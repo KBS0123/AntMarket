@@ -13,6 +13,7 @@ urlpatterns = [
     path('', include('social_django.urls')),
     path('cart/', include('cart.urls', namespace='cart')),
     path('chat/', include('chat.urls')),
+    path('kakaopay/', include('kakaopay.urls', namespace='kakaopay')),
     path('', include('market.urls', namespace='market')),
     path('orders/', include('orders.urls', namespace='orders')),
 ]

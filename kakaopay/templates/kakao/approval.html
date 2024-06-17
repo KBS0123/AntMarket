@@ -1,9 +1,0 @@
-{% extends "market/base.html" %}
-{% block title %}결제 완료{% endblock %}
-{% block content %}
-<h1>결제 완료</h1>
-<p>결제가 성공적으로 완료되었습니다.</p>
-<p>결제 금액:{{ payment.amount }} 원</p>
-<p>결제 상세 정보: {{ payment.item_name }}</p>
-<a href="{% url 'market:home' %}">홈으로 돌아가기</a>
-{% endblock %}
