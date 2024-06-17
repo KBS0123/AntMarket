@@ -60,8 +60,13 @@
     </table>
     <p class="text-right">
         <a href="{% url 'market:home' %}" class="button light">Continue shopping</a>
-        <a href="#" class="button" id="checkoutBtn">Checkout</a>
     </p>
+    <form method="post">
+        {% csrf_token %}
+        <a href="#" id="checkoutBtn">
+            <img src="{% static 'img/kakaopay_button.png'%}" alt="kakaopay_button">
+        </a>
+    </form>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
 $(document).ready(function() {
