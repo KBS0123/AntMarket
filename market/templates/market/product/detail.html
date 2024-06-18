@@ -5,29 +5,88 @@
     {{ product.name }}
 {% endblock %}
 {% block content %}
-    <div class="product-detail">
-        <img src="{% if product.image %}
-                    {{ product.image.url }}
-                  {% else %}
-                    {% static 'img/no_image.png' %}
-                  {% endif %}">
-        <h1>{{ product.name }}</h1>
-        <h2>
-            <a href="{{ product.minicategory.get_absolute_url }}">
-                {{ product.minicategory }}
-            </a>
-        </h2>
-        <p class="price">{{ product.price }}원</p>
-        <form action="{% url 'cart:cart_add' product.id %}" method="post">
-            {{ cart_product_form }}
-            {% csrf_token %}
-            <input type="submit" value="Add to cart">
-        </form>
-        {{ product.description|linebreaks }}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@700&family=Noto+Serif+KR:wght@200..900&display=swap" rel="stylesheet">
+    <style type="text/css">
+        /* 버튼 색상 변경 */
+        .btn-custom-primary {
+            background-color: #b68d85;
+            border-color: #f3ebe6; /* 보더 색상 변경 */
+            color: #ffffff; /* 버튼 텍스트 색상 */
+        }
+
+        /* 페이지 배경색 변경 */
+        body {
+            background-color: #efdbd6; /* 배경색 변경 */
+        }
+
+        /* 채팅 버튼 위치 지정 */
+        .chat-button {
+            position: fixed;
+            bottom: 200px;
+            right: 200px;
+
+        }
+        body {
+            font-family: "Nanum Myeongjo", serif;
+            font-weight: 50;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: "Nanum Myeongjo", serif; /* 제목 태그 */
+        }
+
+        p {
+            font-family: "Nanum Myeongjo", serif; /* 문단 */
+        }
+
+        .price {
+            font-family: "Nanum Myeongjo", serif; /* 특정 클래스 */
+        }
+    </style>
+
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-md-6">
+                <img src="{% if product.image %}{{ product.image.url }}{% else %}{% static 'img/no_image.png' %}{% endif %}" class="img-fluid" alt="Product Image">
+            </div>
+            <div class="col-md-5">
+                <h1 style="font-size: 30px;">{{ product.name }}</h1>
+                <h2 style="font-size: 25px;">
+                    <a class="btn btn-outline-dark mt-auto" href="{{ product.minicategory.get_absolute_url }}">
+                        {{ product.minicategory }}
+                    </a>
+                </h2>
+                <p class="price">{{ product.price }}원</p>
+                <form action="{% url 'cart:cart_add' product.id %}" method="post">
+                    {{ cart_product_form }}
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-custom-primary">장바구니에 추가</button>
+                </form>
+                <p>{{ product.description|linebreaks }}</p>
+            </div>
+        </div>
+        <div class="row mt-3">
+                <a href="{{ product.get_review_url }}" class="btn btn-link">{{ user.username }}</a>
+            <div class="ml-auto">
+                <a href="{% url 'chat:room' product.name %}" class="btn btn-secondary chat-button">채팅</a>
+            </div>
+        </div>
+        {% if user.is_authenticated and product.user.username == user.username %}
+            <div class="row mt-3">
+                <div class="col-md-12">
+                   <a href="{{ product.get_update_url }}">수정</a>
+                    <a href="{{ product.get_delete_url }}" class="btn btn-custom-primary">삭제</a>
+                </div>
+            </div>
+        {% endif %}
+
     </div>
-    <a href="{{ product.get_review_url }}">{{ product.user.username }}</a>
-    <a href="{% url 'chat:room' product.name %}">채팅</a>
-    <div id="map" style="width:500px;height:400px;"></div>
+    <div class="container mt-3">
+        <div id="map" style="width:50%; height:450px; margin-left:660px; margin-bottom:50px;">
+        </div>
+    </div>
     <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=e3165d2c3e60ad707e3de1280a966975"></script>
     <script>
         var container = document.getElementById('map');
@@ -35,35 +94,10 @@
             center: new kakao.maps.LatLng(33.450701, 126.570667),
             level: 3
         };
-
         var map = new kakao.maps.Map(container, options);
     </script>
-    {% if user.is_authenticated and product.user.username == user.username %}
-        <a href="{{ product.get_update_url }}">
-            <input type="button" value="수정">
-        </a>
-        <button id="delete-button" class="btn btn-danger">삭제</button>
-    {% endif %}
-<script>
-    document.getElementById('delete-button').addEventListener('click', function() {
-        if (confirm('이 제품을 삭제하시겠습니까?')) {
-            fetch('{% url "market:product_delete" category_slug=product.category.slug minicategory_slug=product.minicategory.slug id=product.id %}', {
-                method: 'POST',
-                headers: {
-                    'X-CSRFToken': '{{ csrf_token }}',
-                }
-            })
-            .then(response => {
-                if (response.ok) {
-                    window.location.href = '{% url "market:product_list" category_slug=product.category.slug %}';
-                } else {
-                    alert('제품 삭제에 실패했습니다.');
-                }
-            })
-            .catch(error => {
-                alert('오류가 발생했습니다. 다시 시도해 주세요.');
-            });
-        }
-    });
-</script>
+    <!-- Footer-->
+    <footer class="py-5 bg-light">
+        <div class="container"><p class="m-0 text-center text-black">Copyright &copy; team 27.5</p></div>
+    </footer>
 {% endblock %}

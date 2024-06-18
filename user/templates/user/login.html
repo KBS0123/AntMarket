@@ -11,7 +11,7 @@
       margin:0;
       color:#B67356;
       background:#EABEAB;
-      font:600 16px/18px 'Open Sans',sans-serif;
+      font:400 16px/18px 'Open Sans',sans-serif;
     }
     *,:after,:before{box-sizing:border-box}
     .clearfix:after,.clearfix:before{content:'';display:table}
@@ -158,38 +158,74 @@
       text-align:center;
     }
     </style>
-
-
 <div class="login-wrap">
   <div class="login-html">
     <input id="tab-1" type="radio" name="tab" class="sign-in" checked><label for="tab-1" class="tab">Sign In</label>
     <input id="tab-2" type="radio" name="tab" class="sign-up"><label for="tab-2" class="tab">Sign Up</label>
     <div class="login-form">
       <div class="sign-in-htm">
-        <form action="{% url 'user:login' %}" method="post">
-          {% csrf_token %}
-          <div class="group">
-            <label for="username">ID</label>
-              <input type="text" class="form-control" name="username" id="username"
-              value="{{form.username.value|default_if_none:''}}">
+          <form action="{% url 'user:login' %}" method="post">
+              {% csrf_token %}
+        <div class="group">
+          <label for="username" class="label">ID</label>
+          <input id="username" type="text" class="input"
+                 name="username" id="username" value="{{form.username.value|default_if_none:''}}">
+        </div>
+        <div class="group">
+          <label for="password" class="label">Password</label>
+          <input id="password" type="password" class="input"
+                 name="password" id="password" data-type="password" value="{{form.password.value|default_if_none:''}}">
+        </div>
+              <div class="group">
+          <button type="submit" class="button">로그인</button>
           </div>
-          <div class="group">
-            <label for="password" class="label">Password</label>
-              <input type="password" class="form-control" name="password" id="password"
-              value="{{form.password.value|default_if_none:''}}">
-          </div>
-            <button type="submit" class="btn btn-primary">로그인</button>
+          </form>
+        <div class="hr"></div>
+        <div class="foot-lnk">
+        </div>
+      </div>
+      <div class="sign-up-htm">
+          <form method="post" action="{% url 'user:signup' %}" enctype="multipart/form-data">
+                {% csrf_token %}
+              {% include "user/form_errors.html" %}
+        <div class="group">
+          <label for="username" class="label">ID</label>
+          <input id="username" type="text" class="input"
+          name="username" id="username"
+                    value="{{ form.username.value|default_if_none:'' }}">
+        </div>
+        <div class="group">
+          <label for="password1" class="label">Password</label>
+          <input id="password" type="password" class="input" data-type="password"
+           name="password1" id="password1"
+                           value="{{ form.password1.value|default_if_none:'' }}">
+        </div>
+        <div class="group">
+          <label for="password2" class="label">Repeat Password</label>
+          <input id="password" type="password" class="input" data-type="password"
+          name="password2" id="password2"
+                           value="{{ form.password2.value|default_if_none:'' }}">
+        </div>
+        <div class="group">
+          <label for="email" class="label">Email Address</label>
+          <input id="pass" type="text" class="input"
+           name="email" id="email"
+                           value="{{ form.email.value|default_if_none:'' }}">
+        </div>
+        <div class="mb-3">
+          <label for="profile_image">프로필 이미지</label>
+          <input type="file" class="form-control" name="profile_image" id="profile_image">
+        </div>
+        <div class="group">
+          <input type="submit" class="button" value="Sign Up">
+        </div>
         </form>
-          <a href="{% provider_login_url 'kakao' %}">
-            <img src="{% static 'img/kakao_login.png' %}" alt="...">
-          </a>
-        <a href="{% url 'social:begin' 'naver' %}">
-             <img src="{% static 'img/naver_login.png' %}" alt="..." width="25%">
-        </a>
-        <a href="{% url 'social:begin' 'google-oauth2' %}">
-            <img src="{% static 'img/google_login.png' %}" alt="..." width="30%">
-        </a>
-
-    </form>
+        <div class="hr"></div>
+        <div class="foot-lnk">
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
+
 {% endblock %}

@@ -8,10 +8,9 @@
 
 {% block content %}
 <div class="container">
-    <h2>{{ product.name }} 수정</h2>
+    <h2>{{ category.name }} 제품 추가</h2>
     <form id="productForm" method="post" enctype="multipart/form-data">
         {% csrf_token %}
-        <input type="hidden" value="{{ category.name }}">
         <div class="form-group">
             <label for="minicategory">Mini Category:</label>
             <select id="minicategory" name="minicategory">
@@ -33,11 +32,65 @@
             <input type="number" id="price" name="price" class="form-control" required>
         </div>
         <div class="form-group">
+            <label for="address"> Address:</label>
+            <input type="text" id="address" name="address" class="form-control" required>
+        </div>
+        <div class="form-group">
+            <label for="zipcode">Zip Code:</label>
+            <input type="text" id="zipcode" name="zipcode" class="form-control" required>
+        </div>
+        <div class="form-group">
             <label for="image">Product Image:</label>
             <input type="file" id="image" name="image" class="form-control-file">
         </div>
-        <button type="submit" class="btn btn-primary">제품 수정</button>
+        <button type="submit" class="btn btn-primary">제품 추가</button>
         <a href="{% url 'market:home' %}" class="btn btn-secondary">취소</a>
+
+        <div id="map" style="width:500px;height:400px;"></div>
+        <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=e3165d2c3e60ad707e3de1280a966975&libraries=services"></script>
+        <script>
+            var mapContainer = document.getElementById('map'), // 지도를 표시할 div
+                mapOption = {
+                    center: new kakao.maps.LatLng(37.56646, 126.98121), // 지도의 중심좌표
+                    level: 3, // 지도의 확대 레벨
+
+                };
+
+            // 지도를 생성한다
+            var map = new kakao.maps.Map(mapContainer, mapOption);
+
+            function locationLoadSuccess(pos){
+                // 현재 위치 받아오기
+                var currentPos = new kakao.maps.LatLng(pos.coords.latitude,pos.coords.longitude);
+
+                // 지도 이동(기존 위치와 가깝다면 부드럽게 이동)
+                map.panTo(currentPos);
+
+                // 마커 생성
+                var marker = new kakao.maps.Marker({
+                    position: currentPos
+                });
+
+                // 기존에 마커가 있다면 제거
+                marker.setMap(null);
+                marker.setMap(map);
+            };
+
+            function locationLoadError(pos){
+                alert('위치 정보를 가져오는데 실패했습니다.');
+            };
+
+            // 위치 가져오기 버튼 클릭시
+            function getCurrentPosBtn(){
+                navigator.geolocation.getCurrentPosition(locationLoadSuccess,locationLoadError);
+            };
+        </script>
+        <button type="button" class="btn btn-lg btn-primary" id="getMyPositionBtn"
+        onclick="getCurrentPosBtn()">내 위치 가져오기</button>
+
     </form>
+
+    <!-- 수정 버튼 -->
+    <a href="{% url 'market:product_update' product.id %}" class="btn btn-custom-primary">수정</a>
 </div>
 {% endblock %}

@@ -88,6 +88,7 @@
                 background-color: #6C3D27;
                 }
 
+
         </style>
 
         <section class="py-5">
@@ -302,6 +303,10 @@
     <form id="searchForm" method="get" action="{% url 'market:search' %}">
         <input type="hidden" id="kw" name="kw" value="{{ kw|default_if_none:'' }}">
     </form>
+<!-- Footer-->
+        <footer class="py-5 bg-light">
+            <div class="container"><p class="m-0 text-center text-black">Copyright &copy; team 27.5</p></div>
+        </footer>
 {% endblock %}
 {% block script %}
 <script type="text/javascript">

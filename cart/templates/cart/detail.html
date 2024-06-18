@@ -6,60 +6,89 @@
 {% endblock %}
 
 {% block content %}
-    <h1>Your shopping cart</h1>
-    <table class="cart">
-        <thead>
-            <tr>
-                <th>Image</th>
-                <th>Product</th>
-                <th>Quantity</th>
-                <th>Remove</th>
-                <th>Unit price</th>
-                <th>Price</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for item in cart %}
-                {% with product=item.product %}
-                    <tr>
-                        <td>
-                            <a href="{{ product.get_absolute_url }}">
-                                <img src="{% if product.image %}
-                                            {{ product.image.url }}
-                                          {% else %}
-                                            {% static 'image/no_image.png' %}
-                                          {% endif %}">
-                            </a>
-                        </td>
-                        <td>{{ product.name }}</td>
-                        <td>
-                            <form action="{% url 'cart:cart_add' product.id %}" method="post">
-                                {{ item.update_quantity_form.quantity }}
-                                {{ item.update_quantity_form.override }}
-                                <input type="submit" value="Update">
-                                {% csrf_token %}
-                            </form>
-                        </td>
-                        <td>
-                            <form action="{% url 'cart:cart_remove' product.id %}" method="post">
-                                <input type="submit" value="Remove">
-                                {% csrf_token %}
-                            </form>
-                        </td>
-                        <td class="num">{{ item.price }}원</td>
-                        <td class="num">{{ item.total_price }}원</td>
-                    </tr>
-                {% endwith %}
-            {% endfor %}
-            <tr class="total">
-                <td>Total</td>
-                <td colspan="4"></td>
-                <td class="num">{{ cart.get_total_price }}원</td>
-            </tr>
-        </tbody>
-    </table>
-    <p class="text-right">
-        <a href="{% url 'market:home' %}" class="button light">Continue shopping</a>
-        <a href="#" class="button">Checkout</a>
-    </p>
+    <style type="text/css">
+        /* 1번에서 정의한 CSS */
+        .btn-custom-primary {
+            background-color: #b68d85;
+            border-color: #f3ebe6;
+            color: #ffffff;
+        }
+
+        body {
+            background-color: #efdbd6; /* 배경색 변경 */
+            font-family: "Times New Roman", serif;
+            font-weight: 500; /* 폰트 두께 수정 */
+        }
+    </style>
+
+    <h1 class="mt-5 mb-4 text-center">Your shopping cart</h1>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-2 text-center align-self-center">
+                <strong>Image</strong>
+            </div>
+            <div class="col-md-2 text-center align-self-center">
+                <strong>Product</strong>
+            </div>
+            <div class="col-md-2 text-center align-self-center">
+                <strong>Quantity</strong>
+            </div>
+            <div class="col-md-2 text-center align-self-center">
+                <strong>Remove</strong>
+            </div>
+            <div class="col-md-2 text-center align-self-center">
+                <strong>Unit price</strong>
+            </div>
+            <div class="col-md-2 text-center align-self-center">
+                <strong>Price</strong>
+            </div>
+        </div>
+        {% for item in cart %}
+            {% with product=item.product %}
+                <div class="row mt-3">
+                    <div class="col-md-2 text-center align-self-center">
+                        <a href="{{ product.get_absolute_url }}">
+                            <img src="{% if product.image %}{{ product.image.url }}{% else %}{% static 'image/no_image.png' %}{% endif %}" class="img-fluid" alt="Product Image">
+                        </a>
+                    </div>
+                    <div class="col-md-2 text-center align-self-center">
+                        <span>{{ product.name }}</span>
+                    </div>
+                    <div class="col-md-2 text-center align-self-center">
+                        <form action="{% url 'cart:cart_add' product.id %}" method="post">
+                            {{ item.update_quantity_form.quantity }}
+                            {{ item.update_quantity_form.override }}
+                            <button type="submit" class="btn btn-sm btn-custom-primary">Update</button>
+                            {% csrf_token %}
+                        </form>
+                    </div>
+                    <div class="col-md-2 text-center align-self-center">
+                        <form action="{% url 'cart:cart_remove' product.id %}" method="post">
+                            <button type="submit" class="btn btn-sm btn-outline-danger">Remove</button>
+                            {% csrf_token %}
+                        </form>
+                    </div>
+                    <div class="col-md-2 text-center align-self-center">
+                        <span class="num">{{ item.price }}원</span>
+                    </div>
+                    <div class="col-md-2 text-center align-self-center">
+                        <span class="num">{{ item.total_price }}원</span>
+                    </div>
+                </div>
+            {% endwith %}
+        {% endfor %}
+        <div class="row mt-4">
+            <div class="col-md-12 text-right">
+                <strong>Total: {{ cart.get_total_price }}원</strong>
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col-md-6">
+                <a href="{% url 'market:home' %}" class="btn btn-light btn-block">Continue shopping</a>
+            </div>
+            <div class="col-md-6">
+                <a href="#" class="btn btn-custom-primary btn-block">Checkout</a> <!-- btn-custom-primary 클래스 적용 -->
+            </div>
+        </div>
+    </div>
 {% endblock %}
