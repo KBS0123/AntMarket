@@ -1,12 +1,13 @@
 # chat/views.py
 
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.http import JsonResponse
+from market.models import Product
 
 from .models import Message
 from .forms import MessageForm
 
-def room(request, room_name):
+def room(request, room_name, id):
     if request.method == 'POST':
         form = MessageForm(request.POST, request.FILES)
         if form.is_valid():
@@ -18,9 +19,12 @@ def room(request, room_name):
         else:
             return JsonResponse({'error': 'Invalid form'}, status=400)
 
-    messages = Message.objects.filter(room_name=room_name).order_by('timestamp')
+    product = get_object_or_404(Product, id=id)
+    messages = Message.objects.filter(product=product.id).order_by('timestamp')
+
     return render(request, 'chat/room.html', {
         'room_name': room_name,
+
         'messages': messages,
         'form': MessageForm(initial={'room_name': room_name}),
     })

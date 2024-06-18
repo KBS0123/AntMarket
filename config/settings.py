@@ -33,8 +33,6 @@ INSTALLED_APPS = [
     'market.apps.MarketConfig',
     'user.apps.CommonConfig',
     'cart.apps.CartConfig',
-    'orders.apps.OrdersConfig',
-    'payment.apps.PaymentConfig',
     'channels', # 채팅 앱 용 앱
     'chat', # 추가
     'social_django',
@@ -43,7 +41,7 @@ INSTALLED_APPS = [
     'allauth.account',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.kakao',
-    'kakaopay',
+    'kakaopay.apps.KakaopayConfig',
 ]
 
 MIDDLEWARE = [
@@ -62,7 +60,7 @@ ROOT_URLCONF = 'config.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates'],
+        'DIRS': [os.path.join(BASE_DIR / 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

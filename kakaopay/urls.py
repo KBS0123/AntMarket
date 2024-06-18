@@ -6,9 +6,8 @@ app_name = "kakaopay"
 
 urlpatterns = [
     path('', views.index, name='index'),
-    path('approval/', views.approval, name='approval'),
+    path('success/', views.success, name='success'),
     path('cancel/', views.cancel, name='cancel'),
     path('fail/', views.fail, name='fail'),
-    path('callback/', views.kakao_callback, name='kakao_callback'),
  ]
 
