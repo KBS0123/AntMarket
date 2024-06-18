@@ -117,13 +117,3 @@ def product_delete(request, category_slug, minicategory_slug, id):
     product = get_object_or_404(Product, category__slug=category_slug, minicategory__slug=minicategory_slug, id=id)
     product.delete()
     return JsonResponse({'message': 'Product deleted successfully'}, status=200)
-
-def product_review(request, name):
-    product = get_object_or_404(Product, name=name, available=True)
-
-    return render(request, 'market/product/review.html', {'product':product})
-
-
-def kakaopay_callback(request):
-    # 콜백 처리 로직을 여기에 추가
-    return HttpResponse('Kakaopay callback handled')
