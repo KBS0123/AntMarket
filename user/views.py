@@ -2,6 +2,11 @@ from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import render, redirect
 from user.forms import UserForm
 from .models import UserProfile
+from .forms import UserProfileForm
+from django.contrib.auth.models import User
+from django.views.generic.edit import DeleteView
+from django.urls import reverse_lazy
+from django.views import View
 
 def login_success(request):
     username = request.user  # 현재 로그인된 사용자의 이름 가져오기
@@ -13,7 +18,7 @@ def logout_view(request):
 
 def signup(request):
     if request.method == "POST":
-        form = UserForm(request.POST)
+        form = UserForm(request.POST, request.FILES) # 파일 업로드 처리 추가
         if form.is_valid():
             user = form.save()
             profile_image = form.cleaned_data.get('profile_image')
@@ -35,4 +40,19 @@ def profile(request):
     except UserProfile.DoesNotExist:
         user_profile = None
 
+    if request.method == 'POST':
+        form = UserProfileForm(request.POST, request.FILES, instance=user_profile)
+        if form.is_valid():
+            form.save()
+            return redirect('user:profile')
+    else:
+        form = UserProfileForm(instance=user_profile)
+
     return render(request, 'user/profile.html', {'user_profile': user_profile})
+
+class UserDeleteView(DeleteView):
+    model = User
+    success_url = reverse_lazy('market:home')  # 성공 후 리다이렉트할 URL
+
+    def get_object(self, queryset=None):
+        return self.request.user

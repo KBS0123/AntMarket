@@ -13,5 +13,16 @@
     <p>{{ user.email }}</p>
     <a href="#">내가 올린 글</a>
     <br>
-    <a href="{% url 'user:logout' %}">로그아웃</a>
+    <button id="delete-account" class="btn btn-danger">회원탈퇴</button>
+    <form id="delete-form" method="post" action="{% url 'user:delete' %}" style="display:none;">
+        {% csrf_token %}
+    </form>
+<script>
+document.getElementById('delete-account').addEventListener('click', function() {
+    if (confirm('회원을 탈퇴하시겠습니까?')) {
+        document.getElementById('delete-form').submit();
+    }
+});
+</script>
 {% endblock %}
+
