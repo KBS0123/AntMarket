@@ -1,12 +1,13 @@
 from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import render, redirect
+
+from market.models import Category, Product
 from user.forms import UserForm
 from .models import UserProfile
 from .forms import UserProfileForm
 from django.contrib.auth.models import User
 from django.views.generic.edit import DeleteView
 from django.urls import reverse_lazy
-from django.views import View
 
 def login_success(request):
     username = request.user  # 현재 로그인된 사용자의 이름 가져오기
@@ -49,6 +50,25 @@ def profile(request):
         form = UserProfileForm(instance=user_profile)
 
     return render(request, 'user/profile.html', {'user_profile': user_profile})
+
+@login_required
+def my_products(request):
+    user = request.user
+    products = Product.objects.filter(user=user).order_by('-created')
+
+    # 카테고리 필터링
+    category_id = request.GET.get('category')
+    if category_id:
+        category = Category.objects.get(id=category_id)
+        products = products.filter(category=category)
+
+    categories = Category.objects.all()
+
+    return render(request, 'user/profile/my_products.html', {
+        'products': products,
+        'categories': categories,
+        'selected_category': int(category_id) if category_id else None,
+    })
 
 class UserDeleteView(DeleteView):
     model = User

@@ -33,8 +33,6 @@ INSTALLED_APPS = [
     'market.apps.MarketConfig',
     'user.apps.CommonConfig',
     'cart.apps.CartConfig',
-    'orders.apps.OrdersConfig',
-    'payment.apps.PaymentConfig',
     'channels', # 채팅 앱 용 앱
     'chat', # 추가
     'social_django',
