@@ -1,22 +1,40 @@
 <!DOCTYPE html>
-<html>
+<html lang="ko">
 <head>
-    <title>Chat Room</title>
+    <meta charset="UTF-8">
+    <title>채팅방</title>
+    <style>
+        #chat-log {
+            border: 1px solid black;
+            width: 400px;
+            height: 400px;
+            overflow: auto;
+            padding: 10px;
+        }
+        #chat-log div {
+            margin-bottom: 10px;
+        }
+        #chat-log img {
+            max-width: 200px;
+            display: block;
+            margin-top: 5px;
+        }
+    </style>
 </head>
 <body>
-    <h1>Room: {{ room_name }}</h1>
-    <div id="chat-log" style="border:1px solid black; width:400px; height:400px; overflow:auto;">
+    <h1>채팅방: {{ room_name }}</h1>
+    <div id="chat-log">
         {% for message in messages %}
         <div>
             <b>{{ message.timestamp }} {{ message.user.username }}</b> {{ message.message }}
             {% if message.image %}
-                <br><img src="{{ message.image.url }}" alt="Image" style="max-width: 200px;">
+                <br><img src="{{ message.image.url }}" alt="메시지 이미지">
             {% endif %}
         </div>
         {% endfor %}
     </div>
-    <input id="chat-message-input" type="text" size="100">
-    <input id="chat-message-submit" type="button" value="Send">
+    <input id="chat-message-input" type="text" size="100" placeholder="메시지를 입력하세요">
+    <input id="chat-message-submit" type="button" value="전송">
     <input type="file" id="chat-image-input">
 
     <script>
@@ -39,7 +57,7 @@
             message += data.message;
 
             if (data.image_url) {
-                message += `<br><img src="${data.image_url}" alt="Image" style="max-width: 200px;">`;
+                message += `<br><img src="${data.image_url}" alt="이미지">`;
             }
 
             message += '</div>';
@@ -48,7 +66,7 @@
         };
 
         chatSocket.onclose = function(e) {
-            console.error('Chat socket closed unexpectedly');
+            console.error('채팅 소켓이 예기치 않게 닫혔습니다.');
         };
 
         document.getElementById('chat-message-input').focus();
