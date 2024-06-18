@@ -43,7 +43,7 @@ def profile(request):
 @login_required
 def my_products(request):
     user = request.user
-    products = Product.objects.filter(user=user)
+    products = Product.objects.filter(user=user).order_by('-created')
 
     # 카테고리 필터링
     category_id = request.GET.get('category')
