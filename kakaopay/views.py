@@ -76,10 +76,3 @@ def cancel(request):
 
 def fail(request):
     return render(request, 'kakaopay/fail.html')
-
-def kakao_callback(request):
-    code = request.GET.get('code')
-    # 인증 코드 처리 로직
-    if code:
-        return HttpResponse(f'인증 코드: {code}')
-    return HttpResponse('인증 코드가 없습니다.')
