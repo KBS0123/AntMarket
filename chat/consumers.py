@@ -5,11 +5,12 @@ from django.core.files.base import ContentFile
 from channels.generic.websocket import AsyncWebsocketConsumer
 from asgiref.sync import sync_to_async
 from .models import Message
+from .utils import get_valid_group_name
 
 class ChatConsumer(AsyncWebsocketConsumer):
     async def connect(self):
         self.room_name = self.scope['url_route']['kwargs']['room_name']
-        self.room_group_name = 'chat_%s' % self.room_name
+        self.room_group_name = get_valid_group_name(f"chat_{self.room_name}")
 
         # Join room group
         await self.channel_layer.group_add(
