@@ -1,0 +1,44 @@
+{% extends "market/base.html" %}
+
+{% load static %}
+
+{% block title %}
+    내가 올린 글
+{% endblock %}
+
+{% block content %}
+    <h1>내가 올린 글</h1>
+
+    <!-- 카테고리 선택 -->
+    <form action="{% url 'user:my_products' %}" method="get">
+        <label for="category">카테고리:</label>
+        <select name="category" id="category">
+            <option value="">전체</option>
+            {% for category in categories %}
+                <option value="{{ category.id }}"
+                    {% if selected_category == category.id %} selected {% endif %}>
+                    {{ category.name }}
+                </option>
+            {% endfor %}
+        </select>
+        <button type="submit">확인</button>
+    </form>
+
+    <!-- 제품 목록 -->
+    <div class="product-list">
+        {% for product in products %}
+            <div class="product-item">
+                {% if product.image %}
+                    <img src="{{ product.image.url }}" alt="{{ product.name }}" width="150">
+                {% else %}
+                    <p>No image available</p>
+                {% endif %}
+                <h3>{{ product.name }}</h3>
+                <p>카테고리: {{ product.category.name }} / {{ product.minicategory.name }}</p>
+                <p>가격: {{ product.price }}</p>
+            </div>
+        {% empty %}
+            <p>등록된 제품이 없습니다.</p>
+        {% endfor %}
+    </div>
+{% endblock %}

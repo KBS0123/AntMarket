@@ -1,5 +1,8 @@
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
+
+from market.models import Category, Product
 from user.forms import UserForm
 from .models import UserProfile
 
@@ -36,3 +39,22 @@ def profile(request):
         user_profile = None
 
     return render(request, 'user/profile.html', {'user_profile': user_profile})
+
+@login_required
+def my_products(request):
+    user = request.user
+    products = Product.objects.filter(user=user)
+
+    # 카테고리 필터링
+    category_id = request.GET.get('category')
+    if category_id:
+        category = Category.objects.get(id=category_id)
+        products = products.filter(category=category)
+
+    categories = Category.objects.all()
+
+    return render(request, 'user/profile/my_products.html', {
+        'products': products,
+        'categories': categories,
+        'selected_category': int(category_id) if category_id else None,
+    })

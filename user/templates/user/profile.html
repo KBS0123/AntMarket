@@ -11,7 +11,7 @@
         <p>No profile image available.</p>
     {% endif %}
     <p>{{ user.email }}</p>
-    <a href="#">내가 올린 글</a>
+    <a href="{% url 'user:my_products' %}">내가 올린 글</a>
     <br>
     <a href="{% url 'user:logout' %}">로그아웃</a>
 {% endblock %}
