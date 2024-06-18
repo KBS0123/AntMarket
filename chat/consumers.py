@@ -1,4 +1,5 @@
 # consumers.py
+
 import json
 import base64
 from django.core.files.base import ContentFile
@@ -32,6 +33,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
         text_data_json = json.loads(text_data)
         message = text_data_json.get('message', '')
         image_data = text_data_json.get('image', '')
+        username = text_data_json.get('username', '')  # username 가져오기
 
         if image_data:
             format, imgstr = image_data.split(';base64,')
@@ -41,7 +43,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
             image = None
 
         # Save message to the database asynchronously
-        new_message = await self.save_message_to_db(message, image)
+        new_message = await self.save_message_to_db(message, image, username)
 
         # Send message to room group
         await self.channel_layer.group_send(
@@ -49,21 +51,30 @@ class ChatConsumer(AsyncWebsocketConsumer):
             {
                 'type': 'chat_message',
                 'message': message,
-                'user': new_message.user.username,  # 유저 이름 추가
+                'user': username if not new_message.user else new_message.user.username,  # 유저 이름 추가
                 'timestamp': new_message.timestamp.strftime('%Y-%m-%d %H:%M:%S'),
                 'image_url': new_message.image.url if new_message.image else ''
             }
         )
 
     @sync_to_async
-    def save_message_to_db(self, message, image):
+    def save_message_to_db(self, message, image, username):
         user = self.scope['user']
-        return Message.objects.create(
-            room_name=self.room_name,
-            message=message,
-            image=image,
-            user=user
-        )
+        if user.is_authenticated:
+            return Message.objects.create(
+                room_name=self.room_name,
+                message=message,
+                image=image,
+                user=user
+            )
+        else:
+            # 인증되지 않은 유저의 경우
+            return Message.objects.create(
+                room_name=self.room_name,
+                message=message,
+                image=image,
+                user=None
+            )
 
     # Receive message from room group
     async def chat_message(self, event):
