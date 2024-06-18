@@ -17,16 +17,15 @@
     </div>
     <input id="chat-message-input" type="text" size="100">
     <input id="chat-message-submit" type="button" value="Send">
-
     <input type="file" id="chat-image-input">
 
     <script>
         const roomName = "{{ room_name|escapejs }}";
-        const username = "{{ request.user.username|escapejs }}";  // 현재 로그인한 사용자의 이름
+        const username = "{{ request.user.username|escapejs }}";
+        const productId = "{{ product.id|escapejs }}";  // 현재 제품의 ID
 
         const chatSocket = new WebSocket(
-            'ws://' + window.location.host +
-            '/ws/chat/' + roomName + '/'
+            (window.location.protocol === 'https:' ? 'wss://' : 'ws://') + window.location.host + '/ws/chat/' + roomName + '/'
         );
 
         chatSocket.onmessage = function(e) {
@@ -65,7 +64,8 @@
             if (message) {
                 chatSocket.send(JSON.stringify({
                     'message': message,
-                    'username': username
+                    'username': username,
+                    'product_id': productId
                 }));
                 messageInputDom.value = '';
             }
@@ -78,8 +78,10 @@
                 chatSocket.send(JSON.stringify({
                     'message': '',
                     'image': event.target.result,
-                    'username': username
+                    'username': username,
+                    'product_id': productId
                 }));
+                e.target.value = '';  // 입력 필드 지우기
             };
             reader.readAsDataURL(file);
         };
