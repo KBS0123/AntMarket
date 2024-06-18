@@ -3,6 +3,7 @@ from django.shortcuts import render, redirect
 import requests
 from django.http import HttpResponse
 from cart.cart import Cart
+from market.models import Product
 
 next_order_id = 1001
 def index(request):
@@ -68,6 +69,13 @@ def success(request):
 
     cart = Cart(request)
     cart.clear()
+
+    # 결제가 완료된 제품들 데이터베이스에서 삭제하기
+    product_ids_to_delete = cart.get_product_ids()  # Cart 클래스에 해당 메서드를 추가하여 사용자가 구현할 필요가 있습니다.
+
+    for product_id in product_ids_to_delete:
+        product = Product.objects.get(id=product_id)
+        product.delete()
 
     return render(request, 'kakaopay/success.html', context)
 
