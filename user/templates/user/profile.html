@@ -5,11 +5,11 @@
 {% endblock %}
 {% block content %}
     <h1>Profile</h1>
-    {% if user_profile and user_profile.profile_image %}
-        <img src="{{ user_profile.profile_image.url }}" alt="Profile Image" width="150">
-    {% else %}
-        <p>No profile image available.</p>
-    {% endif %}
+    <img src="{% if product.image %}
+                {{ product.image.url }}
+              {% else %}
+                {% static 'img/no_image.png' %}
+              {% endif %}" width="150">
     <p>{{ user.email }}</p>
     <a href="{% url 'user:my_products' %}">내가 올린 글</a>
     <br>

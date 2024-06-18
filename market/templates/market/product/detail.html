@@ -25,7 +25,7 @@
         </form>
         {{ product.description|linebreaks }}
     </div>
-    <a href="{{ product.get_review_url }}">{{ product.user.username }}</a>
+    <h5>{{ product.user.username }}</h5>
     <a href="{% url 'chat:room' product.name product.id %}">채팅</a>
     <div id="map" style="width:500px;height:400px;"></div>
     <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=e3165d2c3e60ad707e3de1280a966975&libraries=services"></script>
