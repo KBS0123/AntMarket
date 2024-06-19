@@ -7,142 +7,151 @@
 {% endblock %}
 
 {% block content %}
-<div class="container">
+<style type="text/css">
+    body {
+            background-color: #f7f3f2;
+        }
+
+    </style>
+<div class="container mt-5">
     <h2>{{ category.name }} 제품 추가</h2>
-    <form id="productForm" method="post" enctype="multipart/form-data">
+    <form id="productForm" method="post" enctype="multipart/form-data" class="mt-3">
         {% csrf_token %}
-        <div class="form-group">
-            <label for="minicategory">Mini Category:</label>
-            <select id="minicategory" name="minicategory">
+        <div class="form-group mb-3">
+            <label for="minicategory" class="form-label">Mini Category:</label>
+            <select id="minicategory" name="minicategory" class="form-select">
                 {% for minicategory in minicategories %}
                     <option value="{{ minicategory.id }}">{{ minicategory.name }}</option>
                 {% endfor %}
             </select>
         </div>
-        <div class="form-group">
-            <label for="name">Product Name:</label>
+        <div class="form-group mb-3">
+            <label for="name" class="form-label">Product Name:</label>
             <input type="text" id="name" name="name" class="form-control" required>
         </div>
-        <div class="form-group">
-            <label for="description">Description:</label>
+        <div class="form-group mb-3">
+            <label for="description" class="form-label">Description:</label>
             <textarea id="description" name="description" class="form-control" required></textarea>
         </div>
-        <div class="form-group">
-            <label for="price">Price (KRW):</label>
+        <div class="form-group mb-3">
+            <label for="price" class="form-label">Price (KRW):</label>
             <input type="number" id="price" name="price" class="form-control" required>
         </div>
-        <div class="form-group">
-            <input type="hidden" id="latitude" name="latitude" class="form-control" readonly>
+        <input type="hidden" id="latitude" name="latitude" class="form-control" readonly>
+        <input type="hidden" id="longitude" name="longitude" class="form-control" readonly>
+        <div class="form-group mb-3">
+            <label for="image" class="form-label">Product Image:</label>
+            <input type="file" id="image" name="image" class="form-control">
         </div>
-        <div class="form-group">
-            <input type="hidden" id="longitude" name="longitude" class="form-control" readonly>
-        </div>
-        <div class="form-group">
-            <label for="image">Product Image:</label>
-            <input type="file" id="image" name="image" class="form-control-file">
-        </div>
-        <div id="map" style="width:500px;height:400px;"></div>
-        <button type="submit" class="btn btn-primary">제품 추가</button>
+        <div id="map" style="width: 100%; height: 400px;" class="mb-3"></div>
+        <button type="submit" class="btn btn-dark">제품 추가</button>
         <a href="{% url 'market:home' %}" class="btn btn-secondary">취소</a>
-
-        <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=e3165d2c3e60ad707e3de1280a966975&libraries=services"></script>
-        <script>
-            var mapContainer = document.getElementById('map'); // 지도를 표시할 div
-            var mapOption = {
-                center: new kakao.maps.LatLng(37.56646, 126.98121), // 초기 지도 중심좌표
-                level: 7 // 지도의 확대 레벨
-            };
-
-            // 지도 생성
-            var map = new kakao.maps.Map(mapContainer, mapOption);
-
-            var marker = new kakao.maps.Marker({
-                // 마커를 생성하되 지도에 표시하지 않습니다.
-                position: map.getCenter()
-            });
-
-            var infowindow = new kakao.maps.InfoWindow({
-                content: '' // 초기에는 내용이 없는 인포윈도우 생성
-            });
-
-            function locationLoadSuccess(pos) {
-                // 현재 위치 받아오기
-                var currentPos = new kakao.maps.LatLng(pos.coords.latitude, pos.coords.longitude);
-
-                // 지도 이동
-                map.setCenter(currentPos);
-
-                // 위치 정보 저장
-                document.getElementById('latitude').value = currentPos.getLat();
-                document.getElementById('longitude').value = currentPos.getLng();
-            }
-
-            function locationLoadError(pos) {
-                alert('위치를 가져올 수 없습니다.');
-            }
-
-            // 페이지 로드 시 현재 위치로 초기화
-            navigator.geolocation.getCurrentPosition(locationLoadSuccess, locationLoadError);
-
-            // 마커에 마우스를 올렸을 때 이벤트 리스너 추가
-            kakao.maps.event.addListener(marker, 'mouseover', function() {
-                // 지오코더 객체 생성
-                var geocoder = new kakao.maps.services.Geocoder();
-
-                // 마커의 위치 가져오기
-                var latlng = marker.getPosition();
-
-                // 역 지오코딩 수행
-                geocoder.coord2Address(latlng.getLng(), latlng.getLat(), function(result, status) {
-                    if (status === kakao.maps.services.Status.OK) {
-                        // 주소가 성공적으로 가져와졌을 경우, 주소를 표시
-                        var address = result[0].address.address_name; // 주소를 필요에 맞게 포맷팅 가능
-
-                        // 인포윈도우 내용 업데이트
-                        infowindow.setContent('<div style="padding:5px;font-size:12px;">' + address + '</div>');
-
-                        // 마커 위에 인포윈도우 열기
-                        infowindow.open(map, marker);
-                    } else {
-                        // 지오코딩 실패 시 처리
-                        console.error('주소를 가져오지 못했습니다.');
-                    }
-                });
-            });
-
-            // 마커에서 마우스를 내렸을 때 이벤트 리스너 추가
-            kakao.maps.event.addListener(marker, 'mouseout', function() {
-                // 인포윈도우 닫기
-                infowindow.close();
-            });
-
-            // 지도 클릭 시 마커 이동
-            kakao.maps.event.addListener(map, 'click', function(mouseEvent) {
-                var latlng = mouseEvent.latLng;
-
-                // 마커가 지도에 표시되지 않았다면 생성합니다
-                if (!marker.getMap()) {
-                    marker.setMap(map);
-                }
-
-                // 마커 위치를 클릭한 위치로 옮깁니다
-                marker.setPosition(latlng);
-                document.getElementById('latitude').value = latlng.getLat();
-                document.getElementById('longitude').value = latlng.getLng();
-
-                // 클릭한 위치의 주소를 가져와서 인포윈도우 업데이트
-                var geocoder = new kakao.maps.services.Geocoder();
-                geocoder.coord2Address(latlng.getLng(), latlng.getLat(), function(result, status) {
-                    if (status === kakao.maps.services.Status.OK) {
-                        var address = result[0].address.address_name; // 주소를 필요에 맞게 포맷팅 가능
-                        infowindow.setContent('<div style="padding:5px;font-size:12px;">' + address + '</div>');
-                    } else {
-                        console.error('주소를 가져오지 못했습니다.');
-                    }
-                });
-            });
-        </script>
-
     </form>
 </div>
+<div class="mb-4"></div>
+
+<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=e3165d2c3e60ad707e3de1280a966975&libraries=services"></script>
+<script>
+    var mapContainer = document.getElementById('map'); // 지도를 표시할 div
+    var mapOption = {
+        center: new kakao.maps.LatLng(37.56646, 126.98121), // 초기 지도 중심좌표
+        level: 7 // 지도의 확대 레벨
+    };
+
+    // 지도 생성
+    var map = new kakao.maps.Map(mapContainer, mapOption);
+
+    var marker = new kakao.maps.Marker({
+        // 마커를 생성하되 지도에 표시하지 않습니다.
+        position: map.getCenter()
+    });
+
+    var infowindow = new kakao.maps.InfoWindow({
+        content: '' // 초기에는 내용이 없는 인포윈도우 생성
+    });
+
+    function locationLoadSuccess(pos) {
+        // 현재 위치 받아오기
+        var currentPos = new kakao.maps.LatLng(pos.coords.latitude, pos.coords.longitude);
+
+        // 지도 이동
+        map.setCenter(currentPos);
+
+        // 위치 정보 저장
+        document.getElementById('latitude').value = currentPos.getLat();
+        document.getElementById('longitude').value = currentPos.getLng();
+    }
+
+    function locationLoadError(pos) {
+        alert('위치를 가져올 수 없습니다.');
+    }
+
+    // 페이지 로드 시 현재 위치로 초기화
+    navigator.geolocation.getCurrentPosition(locationLoadSuccess, locationLoadError);
+
+    // 마커에 마우스를 올렸을 때 이벤트 리스너 추가
+    kakao.maps.event.addListener(marker, 'mouseover', function() {
+        // 지오코더 객체 생성
+        var geocoder = new kakao.maps.services.Geocoder();
+
+        // 마커의 위치 가져오기
+        var latlng = marker.getPosition();
+
+        // 역 지오코딩 수행
+        geocoder.coord2Address(latlng.getLng(), latlng.getLat(), function(result, status) {
+            if (status === kakao.maps.services.Status.OK) {
+                // 주소가 성공적으로 가져와졌을 경우, 주소를 표시
+                var address = result[0].address.address_name; // 주소를 필요에 맞게 포맷팅 가능
+
+                // 인포윈도우 내용 업데이트
+                infowindow.setContent('<div style="padding:5px;font-size:12px;">' + address + '</div>');
+
+                // 마커 위에 인포윈도우 열기
+                infowindow.open(map, marker);
+            } else {
+                // 지오코딩 실패 시 처리
+                console.error('주소를 가져오지 못했습니다.');
+            }
+        });
+    });
+
+    // 마커에서 마우스를 내렸을 때 이벤트 리스너 추가
+    kakao.maps.event.addListener(marker, 'mouseout', function() {
+        // 인포윈도우 닫기
+        infowindow.close();
+    });
+
+    // 지도 클릭 시 마커 이동
+    kakao.maps.event.addListener(map, 'click', function(mouseEvent) {
+        var latlng = mouseEvent.latLng;
+
+        // 마커가 지도에 표시되지 않았다면 생성합니다
+        if (!marker.getMap()) {
+            marker.setMap(map);
+        }
+
+        // 마커 위치를 클릭한 위치로 옮깁니다
+        marker.setPosition(latlng);
+        document.getElementById('latitude').value = latlng.getLat();
+        document.getElementById('longitude').value = latlng.getLng();
+
+        // 클릭한 위치의 주소를 가져와서 인포윈도우 업데이트
+        var geocoder = new kakao.maps.services.Geocoder();
+        geocoder.coord2Address(latlng.getLng(), latlng.getLat(), function(result, status) {
+            if (status === kakao.maps.services.Status.OK) {
+                var address = result[0].address.address_name; // 주소를 필요에 맞게 포맷팅 가능
+                infowindow.setContent('<div style="padding:5px;font-size:12px;">' + address + '</div>');
+            } else {
+                console.error('주소를 가져오지 못했습니다.');
+            }
+        });
+    });
+</script>
+
+ <!-- Footer -->
+    <footer class="py-5 bg-dark">
+        <div class="container">
+            <p class="m-0 text-center text-white">Copyright &copy; team 27.5</p>
+        </div>
+    </footer>
 {% endblock %}

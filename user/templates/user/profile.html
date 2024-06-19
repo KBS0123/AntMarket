@@ -31,14 +31,14 @@
         .content-container::before {
             left: 0;
             width: 50%; /* 왼쪽 절반만 색상이 표시됨 */
-            background-color: #EABEAB; /* 왼쪽 배경색 */
+            background-color: #f1d9cf; /* 왼쪽 배경색 */
         }
 
         /* 오른쪽 여백 스타일 */
         .content-container::after {
             right: 0;
             width: 50%; /* 오른쪽 절반만 색상이 표시됨 */
-            background-color: #B67356; /* 오른쪽 배경색 */
+            background-color: #a96f5f; /* 오른쪽 배경색 */
         }
 
         /* 내용 컨테이너 스타일 */
@@ -49,8 +49,12 @@
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            max-width: 500px; /* 컨텐츠 최대 너비 */
-            margin: 0 auto; /* 가운데 정렬 */
+            width: 300px;
+            max-width: 800px; /* 컨텐츠 최대 너비 */
+            margin: 100px; /* 가운데 정렬 */
+            height: 400px; /* 내용에 맞게 높이 자동 조절 */
+            max-height: 80vh; /* 최대 높이를 화면 높이의 80%로 제한 */
+            overflow-y: auto; /* 내용이 넘칠 경우 스크롤 표시 */
         }
 
         /* 프로필 이미지 스타일 */
@@ -75,15 +79,16 @@
             background-color: #333; /* 마우스 호버 시 배경색 조정 */
         }
     </style>
-
+<div class="content-container">
+    <div class="content">
     <h1>Profile</h1>
     <img src="{% if product.image %}
                 {{ product.image.url }}
               {% else %}
                 {% static 'img/no_image.png' %}
-              {% endif %}" width="150">
+              {% endif %}" class="profile-image" width="150">
     <p>{{ user.email }}</p>
-    <a href="{% url 'user:my_products' %}">내가 올린 글</a>
+    <a href="{% url 'user:my_products' %}" class="btn">내가 올린 글</a>
     <br>
     <button id="delete-account" class="btn btn-danger">회원탈퇴</button>
     <form id="delete-form" method="post" action="{% url 'user:delete' %}" style="display:none;">
