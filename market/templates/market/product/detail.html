@@ -27,7 +27,9 @@
         {{ product.description|linebreaks }}
     </div>
     <h5>{{ product.user.username }}</h5>
-    <a href="{% url 'chat:room' product.name product.user.id request.user.id %}">채팅</a>
+    {% if user.is_authenticated %}
+        <a href="{% url 'chat:room' product.name product.user.id request.user.id %}">채팅</a>
+    {% endif %}
     <div id="map" style="width:500px;height:400px;"></div>
     {% if user.is_authenticated and product.user.username == user.username %}
         <a href="{{ product.get_update_url }}">
