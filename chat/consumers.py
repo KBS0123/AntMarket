@@ -1,5 +1,3 @@
-# consumers.py
-
 import json
 import base64
 from django.core.files.base import ContentFile
@@ -7,6 +5,7 @@ from channels.generic.websocket import AsyncWebsocketConsumer
 from asgiref.sync import sync_to_async
 from .models import Message
 from .utils import get_valid_group_name
+from market.models import Product  # Product 모델 임포트
 
 class ChatConsumer(AsyncWebsocketConsumer):
     async def connect(self):
@@ -34,6 +33,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
         message = text_data_json.get('message', '')
         image_data = text_data_json.get('image', '')
         username = text_data_json.get('username', '')  # username 가져오기
+        product_id = text_data_json.get('product_id', '')  # product_id 가져오기
 
         if image_data:
             format, imgstr = image_data.split(';base64,')
@@ -43,7 +43,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
             image = None
 
         # Save message to the database asynchronously
-        new_message = await self.save_message_to_db(message, image, username)
+        new_message = await self.save_message_to_db(message, image, username, product_id)
 
         # Send message to room group
         await self.channel_layer.group_send(
@@ -58,14 +58,22 @@ class ChatConsumer(AsyncWebsocketConsumer):
         )
 
     @sync_to_async
-    def save_message_to_db(self, message, image, username):
+    def save_message_to_db(self, message, image, username, product_id):
         user = self.scope['user']
+        product = None
+        if product_id:
+            try:
+                product = Product.objects.get(id=product_id)
+            except Product.DoesNotExist:
+                pass  # 제품이 존재하지 않는 경우에 대한 처리
+
         if user.is_authenticated:
             return Message.objects.create(
                 room_name=self.room_name,
                 message=message,
                 image=image,
-                user=user
+                user=user,
+                product=product
             )
         else:
             # 인증되지 않은 유저의 경우
@@ -73,7 +81,8 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 room_name=self.room_name,
                 message=message,
                 image=image,
-                user=None
+                user=None,
+                product=product
             )
 
     # Receive message from room group

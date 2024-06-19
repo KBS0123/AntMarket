@@ -1,3 +1,4 @@
+<!-- cart/detail.html -->
 {% extends "market/base.html" %}
 {% load static %}
 
@@ -99,44 +100,36 @@
             </tr>
         </thead>
         <tbody>
-        {% for item in cart %}
-            {% with product=item.product %}
-                <tr>
-                    <td>
-                        <a href="{{ product.get_absolute_url }}">
-                            <img src="{% if product.image %}
-                                        {{ product.image.url }}
-                                      {% else %}
-                                        {% static 'image/no_image.png' %}
-                                      {% endif %}" alt="Product Image">
-                        </a>
-                    </td>
-                    <td>{{ product.name }}</td>
-                    <td>
-                        <form action="{% url 'cart:cart_add' product.id %}" method="post">
-                            <input type="number" name="quantity" value="{{ item.quantity }}" min="1" max="100">
-                            <input type="hidden" name="override" value="True">
-                            <input type="submit" value="Update">
-                            {% csrf_token %}
-                        </form>
-                    </td>
-                    <td class="num">{{ item.price }}원</td>
-                    <td class="num">{{ item.total_price }}원</td>
-                    <td>
-                        <form action="{% url 'cart:cart_remove' product.id %}" method="post">
-                            <input type="submit" value="Remove">
-                            {% csrf_token %}
-                        </form>
-                    </td>
-                </tr>
-            {% endwith %}
-        {% endfor %}
-    <tr class="total">
-        <td>Total</td>
-        <td colspan="4"></td>
-        <td class="num">{{ cart.get_total_price }}원</td>
-    </tr>
-</tbody>
+            {% for item in cart %}
+                {% with product=item.product %}
+                    <tr>
+                        <td>
+                            <a href="{{ product.get_absolute_url }}">
+                                <img src="{% if product.image %}
+                                            {{ product.image.url }}
+                                          {% else %}
+                                            {% static 'image/no_image.png' %}
+                                          {% endif %}">
+                            </a>
+                        </td>
+                        <td>{{ product.name }}</td>
+                        <td>
+                            <form action="{% url 'cart:cart_remove' product.id %}" method="post">
+                                <input type="submit" value="Remove">
+                                {% csrf_token %}
+                            </form>
+                        </td>
+                        <td class="num">{{ item.price }}원</td>
+                        <td class="num">{{ item.total_price }}원</td>
+                    </tr>
+                {% endwith %}
+            {% endfor %}
+            <tr class="total">
+                <td>Total</td>
+                <td colspan="4"></td>
+                <td class="num">{{ cart.get_total_price }}원</td>
+            </tr>
+        </tbody>
     </table>
 
     <p class="text-right">
@@ -152,22 +145,20 @@
             <img src="{% static 'img/kakaopay_button.png'%}" alt="kakaopay_button">
         </button>
     </form>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+$(document).ready(function() {
+    $('#kakaopayForm').submit(function(e) {
+        // 세션에 저장된 로그인 정보 확인
+        var isLoggedIn = "{{ request.user.is_authenticated }}"; // Django 템플릿 변수를 JavaScript로 가져옴
 
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script>
-        $(document).ready(function() {
-            $('#kakaopayForm').submit(function(e) {
-                // 세션에 저장된 로그인 정보 확인
-                var isLoggedIn = "{{ request.user.is_authenticated }}"; // Django 템플릿 변수를 JavaScript로 가져옴
-
-                if (isLoggedIn !== "True") {
-                    e.preventDefault(); // 로그인되지 않은 경우 기본 이벤트(폼 제출) 방지
-                    window.location.href = '{% url "user:login" %}';
-                } else if (!confirm('결제하시겠습니까?')) {
-                    e.preventDefault(); // 확인하지 않은 경우 기본 이벤트(폼 제출) 방지
-                }
-            });
-        });
-    </script>
-
+        if (isLoggedIn !== "True") {
+            e.preventDefault(); // 로그인되지 않은 경우 기본 이벤트(폼 제출) 방지
+            window.location.href = '{% url "user:login" %}';
+        } else if (!confirm('결제하시겠습니까?')) {
+            e.preventDefault(); // 확인하지 않은 경우 기본 이벤트(폼 제출) 방지
+        }
+    });
+});
+</script>
 {% endblock %}

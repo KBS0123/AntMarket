@@ -1,3 +1,4 @@
+# cart/cart.py
 from decimal import Decimal
 from django.conf import settings
 from market.models import Product
@@ -58,6 +59,12 @@ class Cart:
 
     def get_total_price(self):
         return sum(Decimal(item['price']) * item['quantity'] for item in self.cart.values())
+
+    def get_product_ids(self):
+        return list(self.cart.keys())
+
+    def contains_product(self, product_id):
+        return str(product_id) in self.cart
 
     def clear(self):
         # 카트 세션 삭제

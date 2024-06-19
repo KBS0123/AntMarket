@@ -4,7 +4,7 @@
     Profile
 {% endblock %}
 {% block content %}
-    <style>
+ <style>
         /* 전체 컨텐츠를 중앙 정렬하기 위한 스타일 */
         .content-container {
             display: flex;
@@ -76,29 +76,25 @@
         }
     </style>
 
-    <div class="content-container">
-        <div class="content">
-            <h1>Profile</h1>
-            {% if user_profile and user_profile.profile_image %}
-                <img src="{{ user_profile.profile_image.url }}" alt="Profile Image" class="profile-image" width="150">
-            {% else %}
-                <p>No profile image available.</p>
-            {% endif %}
-            <p>{{ user.email }}</p>
-            <a href="{% url 'user:my_products' %}" class="btn">내가 올린 글</a>
-            <br>
-            <button id="delete-account" class="btn btn-danger">회원탈퇴</button>
-            <form id="delete-form" method="post" action="{% url 'user:delete' %}" style="display:none;">
-                {% csrf_token %}
-            </form>
-        </div>
-    </div>
-
-    <script>
-        document.getElementById('delete-account').addEventListener('click', function() {
-            if (confirm('회원을 탈퇴하시겠습니까?')) {
-                document.getElementById('delete-form').submit();
-            }
-        });
-    </script>
+    <h1>Profile</h1>
+    <img src="{% if product.image %}
+                {{ product.image.url }}
+              {% else %}
+                {% static 'img/no_image.png' %}
+              {% endif %}" width="150">
+    <p>{{ user.email }}</p>
+    <a href="{% url 'user:my_products' %}">내가 올린 글</a>
+    <br>
+    <button id="delete-account" class="btn btn-danger">회원탈퇴</button>
+    <form id="delete-form" method="post" action="{% url 'user:delete' %}" style="display:none;">
+        {% csrf_token %}
+    </form>
+<script>
+document.getElementById('delete-account').addEventListener('click', function() {
+    if (confirm('회원을 탈퇴하시겠습니까?')) {
+        document.getElementById('delete-form').submit();
+    }
+});
+</script>
 {% endblock %}
+

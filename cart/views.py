@@ -12,6 +12,10 @@ def cart_add(request, product_id):
 
     if form.is_valid():
         cd = form.cleaned_data
+
+        if cart.contains_product(product.id):
+            return redirect('cart:cart_detail')
+
         cart.add(product=product, quantity=cd['quantity'], override_quantity=cd['override'])
 
     return redirect('cart:cart_detail')
