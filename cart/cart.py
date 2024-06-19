@@ -63,6 +63,9 @@ class Cart:
     def get_product_ids(self):
         return list(self.cart.keys())
 
+    def contains_product(self, product_id):
+        return str(product_id) in self.cart
+
     def clear(self):
         # 카트 세션 삭제
         del self.session[settings.CART_SESSION_ID]
