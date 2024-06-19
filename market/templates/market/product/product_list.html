@@ -4,16 +4,29 @@
     {{ category.name }}
 {% endblock %}
 {% block content %}
+<head>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@700&family=Noto+Serif+KR:wght@200..900&display=swap" rel="stylesheet">
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard-dynamic-subset.min.css" />
+</head>
 <style type="text/css">
     body {
         background-color: #DDBBAA;
     }
+    .centered {
+        text-align: center;
+        margin-top: 50px;
+        font-weight: bold;
+    }
+
+    .text {
+        color: #8c6b68;
+    }
 </style>
-<div id="main" class="product-list">
-    <h1 style="color: white">
+
+<div class="container mt-5">
+    <h1 class="centered text">
         {{ category.name }}
     </h1>
     <div class="card-footer p-4 pt-0 border-top-0 bg-transparent text-center">

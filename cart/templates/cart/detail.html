@@ -1,4 +1,3 @@
-<!-- cart/detail.html -->
 {% extends "market/base.html" %}
 {% load static %}
 
@@ -9,156 +8,200 @@
 {% block content %}
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@700&family=Noto+Serif+KR:wght@200..900&display=swap" rel="stylesheet">
-<link rel="stylesheet" type="text/css" href="{% static 'bootstrap.min.css'%}">
-<link rel="stylesheet" type="text/css" href="{% static 'style.css'%}">
- <style type="text/css">
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+<link rel="stylesheet" type="text/css" href="{% static 'bootstrap.min.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
 
-        body {
-            background-color: #aa9087;
-            font-family: 'Nanum Myeongjo', serif;
-        }
+<style type="text/css">
+    body {
+        background-color: #5d4d45;
+        font-family: 'Pretendard';
+        color: #fff;
+        margin: 0;
+        padding: 0;
+    }
 
-        h1 {
-            font-size: 2.5rem;
-            color: #333;
-        }
+    h1 {
+        font-size: 2.5rem;
+        color: #fff;
+        margin-top: 20px;
+        text-align: center;
+    }
 
-        table.cart {
-            width: 100%;
-            margin-top: 2rem;
-            border-collapse: collapse;
-        }
+    table.cart {
+        width: 80%;
+        margin: 2rem auto; /* 수직 가운데 정렬을 위해 margin을 auto로 설정 */
+        border-collapse: collapse;
+        background-color: transparent;
+        border-radius: 10px;
+        overflow: hidden;
+    }
 
-        table.cart th,
-        table.cart td {
-            padding: 1rem;
-            text-align: left;
-            border-bottom: 1px solid #ddd;
-        }
+    table.cart th,
+    table.cart td {
+        padding: 1rem;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+    }
 
-        table.cart th {
-            background-color: #f8f9fa;
-            font-weight: bold;
-            font-size: 1.1rem;
-            color: #333;
-        }
+    table.cart th {
+        background-color: #f8f9fa;
+        font-weight: bold;
+        font-size: 1.1rem;
+        color: #333;
+    }
 
-        table.cart td {
-            vertical-align: middle;
-        }
+    table.cart td {
+        vertical-align: middle;
+    }
 
-        table.cart img {
-            max-width: 80px;
-            height: auto;
-            border-radius: 8px;
-        }
+    table.cart img {
+        max-width: 100px;
+        height: auto;
+        border-radius: 5px;
+    }
 
-        .num {
-            font-family: 'Noto Serif KR', serif;
-        }
+    .num {
+        font-family: 'Pretendard';
+    }
 
-        .total {
-            font-weight: bold;
-            font-size: 1.2rem;
-        }
+    .total {
+        font-weight: bold;
+        font-size: 1.2rem;
+        text-align: right;
+    }
 
-        .button.light {
-            background-color: #f8f9fa;
-            color: #333;
-            padding: 0.5rem 1rem;
-            text-decoration: none;
-            border-radius: 5px;
-            font-size: 1rem;
-        }
+    .button {
+        position: absolute;
+        right: 190px; /* 원하는 위치의 right 값 설정 */
+        display: inline-block;
+        padding: 0.5rem 1rem;
+        text-decoration: none;
+        border-radius: 5px;
+        font-size: 1rem;
+        background-color: #007bff;
+        color: #fff;
+        text-align: center;
+        transition: background-color 0.3s;
+    }
 
-        #kakaopayBtn {
-            background-color: transparent;
-            border: none;
-            cursor: pointer;
-            padding: 0;
-            margin-top: 1rem;
-        }
+    .button.light {
+        background-color: #f8f9fa;
+        color: #333;
+        margin-right: 10px;
+    }
 
-        #kakaopayBtn img {
-            max-width: 150px;
-            height: auto;
-        }
-    </style>
+    .button:hover {
+        background-color: #0056b3;
+    }
 
-    <h1>Your shopping cart</h1>
+    #kakaopayBtn {
+        background-color: transparent;
+        border: none;
+        cursor: pointer;
+        padding: 0;
+        margin-top: 1rem;
+        display: block;
+        margin: 0 auto;
+    }
 
-    <table class="cart">
-        <thead>
-            <tr>
-                <th>Image</th>
-                <th>Product</th>
-                <th>Quantity</th>
-                <th>Unit price</th>
-                <th>Price</th>
-                <th>Remove</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for item in cart %}
-                {% with product=item.product %}
-                    <tr>
-                        <td>
-                            <a href="{{ product.get_absolute_url }}">
-                                <img src="{% if product.image %}
-                                            {{ product.image.url }}
-                                          {% else %}
-                                            {% static 'image/no_image.png' %}
-                                          {% endif %}">
-                            </a>
-                        </td>
-                        <td>{{ product.name }}</td>
-                        <td>
-                            <form action="{% url 'cart:cart_remove' product.id %}" method="post">
-                                <input type="submit" value="Remove">
-                                {% csrf_token %}
-                            </form>
-                        </td>
-                        <td class="num">{{ item.price }}원</td>
-                        <td class="num">{{ item.total_price }}원</td>
-                    </tr>
-                {% endwith %}
-            {% endfor %}
-            <tr class="total">
-                <td>Total</td>
-                <td colspan="4"></td>
-                <td class="num">{{ cart.get_total_price }}원</td>
-            </tr>
-        </tbody>
-    </table>
+    #kakaopayBtn img {
+        max-width: 150px;
+        height: auto;
+    }
 
-    <p class="text-right">
-        <a href="{% url 'market:home' %}" class="button light">Continue shopping</a>
-    </p>
+    .remove-btn {
+        background-color: #dc3545;
+        color: #fff;
+        border: none;
+        padding: 8px 12px;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
 
-    <form action="{% url 'kakaopay:index' %}" method="post" id="kakaopayForm">
-        {% csrf_token %}
-        <input type="hidden" name="item_name" value="{% for item in cart %}{% if not forloop.first %}, {% endif %}{{ item.product.name }}{% endfor %}">
-        <input type="hidden" name="quantity" value="{{ cart|length }}">
-        <input type="hidden" name="total_amount" value="{{ cart.get_total_price }}">
-        <button type="submit" id="kakaopayBtn">
-            <img src="{% static 'img/kakaopay_button.png'%}" alt="kakaopay_button">
-        </button>
-    </form>
+    .remove-btn:hover {
+        background-color: #c82333;
+    }
+
+</style>
+<div class="mb-5"></div>
+<h1>Your shopping cart</h1>
+
+<table class="cart">
+    <thead>
+        <tr>
+            <th>Image</th>
+            <th>Product</th>
+            <th>Quantity</th>
+            <th>Unit price</th>
+            <th>Price</th>
+            <th>Remove</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for item in cart %}
+            {% with product=item.product %}
+                <tr>
+                    <td>
+                        <a href="{{ product.get_absolute_url }}">
+                            <img src="{% if product.image %}
+                                        {{ product.image.url }}
+                                      {% else %}
+                                        {% static 'image/no_image.png' %}
+                                      {% endif %}">
+                        </a>
+                    </td>
+                    <td>{{ product.name }}</td>
+                    <td>{{ item.quantity }}</td>
+                    <td class="num">{{ item.price }}원</td>
+                    <td class="num">{{ item.total_price }}원</td>
+                    <td>
+                        <form action="{% url 'cart:cart_remove' product.id %}" method="post">
+                            <button type="submit" class="btn btn-outline-light d-flex align-items-center justify-content-center" style="height: 3rem; width: 5rem;">Remove</button>
+                            {% csrf_token %}
+                        </form>
+                    </td>
+                </tr>
+            {% endwith %}
+        {% endfor %}
+        <tr class="total">
+            <td colspan="4">Total</td>
+            <td class="num">{{ cart.get_total_price }}원</td>
+            <td></td>
+        </tr>
+    </tbody>
+</table>
+
+<p class="text-right">
+    <a href="{% url 'market:home' %}" class="btn btn-outline-light d-flex align-items-center justify-content-center" style="height: 3rem; width: 13rem;
+                position: absolute; right: 220px;">Continue shopping</a>
+</p>
+
+<form action="{% url 'kakaopay:index' %}" method="post" id="kakaopayForm">
+    {% csrf_token %}
+    <input type="hidden" name="item_name" value="{% for item in cart %}{% if not forloop.first %}, {% endif %}{{ item.product.name }}{% endfor %}">
+    <input type="hidden" name="quantity" value="{{ cart|length }}">
+    <input type="hidden" name="total_amount" value="{{ cart.get_total_price }}">
+    <button type="submit" id="kakaopayBtn">
+        <img src="{% static 'img/kakaopay_button.png' %}" alt="kakaopay_button">
+    </button>
+</form>
+
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
 $(document).ready(function() {
     $('#kakaopayForm').submit(function(e) {
-        // 세션에 저장된 로그인 정보 확인
-        var isLoggedIn = "{{ request.user.is_authenticated }}"; // Django 템플릿 변수를 JavaScript로 가져옴
+        var isLoggedIn = "{{ request.user.is_authenticated }}";
 
         if (isLoggedIn !== "True") {
-            e.preventDefault(); // 로그인되지 않은 경우 기본 이벤트(폼 제출) 방지
+            e.preventDefault();
             window.location.href = '{% url "user:login" %}';
         } else if (!confirm('결제하시겠습니까?')) {
-            e.preventDefault(); // 확인하지 않은 경우 기본 이벤트(폼 제출) 방지
+            e.preventDefault();
         }
     });
 });
 </script>
+
 {% endblock %}

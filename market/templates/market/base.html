@@ -19,25 +19,6 @@
 <!-- navbar -->
 {% include 'market/navbar.html' %}
 
-<div id="subheader">
-    <div class="cart d-flex px-4 mt-4">
-        <form action="{% url 'cart:cart_detail' %}" method="get">
-            {% with total_items=cart|length %}
-                {% if total_items > 0 %}
-                    <button type="submit" class="btn btn-outline-dark">
-                        Cart:
-                        {{ total_items }} item{{ total_items|pluralize }},
-                        {{ cart.get_total_price }}원
-                    </button>
-                {% else %}
-                    <button type="submit" class="btn btn-outline-dark">
-                        Your cart is empty.
-                    </button>
-                {% endif %}
-            {% endwith %}
-        </form>
-    </div>
-</div>
 
 <div id="content">
     {% block content %}
