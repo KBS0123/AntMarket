@@ -1,9 +1,9 @@
 {% load static %}
 <head>
+    <link href="{% static 'css/component.css' %}" rel="stylesheet"/>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link href="{% static 'css/styles.css' %}" rel="stylesheet"/>
-    <link href="{% static 'css/component.css' %}" rel="stylesheet"/>
 </head>
 
 <!-- 네비게이션 바 -->
@@ -19,7 +19,7 @@
         display: inline-block;
         margin: -8px 0px;
         outline: none;
-        color: #6C3E28; /*카테고리 내부 글 색상*/
+        color: rgba(0, 0, 0, 1) !important; /*카테고리 내부 글 색상*/
         text-decoration: none;
         text-transform: uppercase;
         text-align: center;
@@ -44,7 +44,7 @@
     li{
         font-family: "Nanum Myeongjo", serif;
         font-size: 30px;
-        color: #6C3E28;
+        color: rgba(0, 0, 0, 1) !important;
         padding: 5px 150px 8px 100px; /*메뉴 항목 위치 조정*/
     }
 
@@ -84,7 +84,7 @@
     }
 
 </style>
-
+        <!--navbar-->
         <nav class="navbar">
             <div class="cl-effect-1 px-40 px-lg-5">
                 <a href="#" class="navbar-brand d-flex align-items-center">
@@ -93,8 +93,6 @@
                 <ul class="nav justify-content-center">
                     <li class="nav-item">
                         {% if user.is_authenticated %}
-                        <a class="nav-link" href="{% url 'market:product_update' category_slug=minicategory.category.
-                        category_slug minicategory_slug=minicategory.minicategory_slug id=minicategory.id %}">제품 수정</a>
                         <a class="nav-link" href="{% url 'user:profile' %}">{{user.username}}</a>
                         <a class="nav-link" href="{% url 'user:logout' %}">로그아웃</a>
                         {% else %}

@@ -18,7 +18,7 @@
     </h1>
     <div class="card-footer p-4 pt-0 border-top-0 bg-transparent text-center">
         {% if user.is_authenticated %}
-            <a class="nav-link" href="{{ category.get_create_url }}">
+            <a class="btn btn-outline-dark" href="{{ category.get_create_url }}">
                 {{ category.name }} 제품 등록
             </a>
         {% endif %}
