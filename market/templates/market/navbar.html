@@ -88,31 +88,29 @@
         <nav class="navbar">
             <div class="cl-effect-1 px-40 px-lg-5">
                 <a href="#" class="navbar-brand d-flex align-items-center">
-                    <a href="{% url 'market:home' %}"><img src="{% static 'img/Ant Market No Bg.png' %}" height="100" width="210" style="margin: 2px 5px 8px 5px"></a>
+                    <a href="{% url 'market:home' %}">
+                        <img src="{% static 'img/Ant Market No Bg.png' %}"
+                             height="100" width="210" style="margin: 2px 5px 8px 5px">
+                    </a>
                 </a>
                 <ul class="nav justify-content-center">
                     <li class="nav-item">
                         {% if user.is_authenticated %}
-                        <a class="nav-link" href="{% url 'user:profile' %}">{{user.username}}</a>
-                        <a class="nav-link" href="{% url 'user:logout' %}">로그아웃</a>
+                            <a class="nav-link" href="{% url 'user:profile' %}">{{user.username}}</a>
+                            <a class="nav-link" href="{% url 'user:logout' %}">로그아웃</a>
                         {% else %}
-                        <a class="nav-link" href="{% url 'user:login' %}">Login</a>
+                            <a class="nav-link" href="{% url 'user:login' %}">Login</a>
                         {% endif %}
                     </li>
-                    <li> <!--회원가입, 유저가 로그인 하지 않은 상태에서 회원가입하도록 처리-->
-                        {% if not user.is_authenticated %}
-                        <a class="nav-link" href="{% url 'user:signup' %}">Sign up</a>
-                        </li>
-                            {% endif %}
-                           <div style="display: flex; justify-content: flex-end;">
-                                <ul class="nav" style="list-style-type: none; padding: 0;">
-                                    {% for category in categories %}
-                                    <li style="display: inline-block; margin-left: 50px;">
-                                        <a class="nav-link" href="{{ category.get_absolute_url }}">{{ category.name }}</a>
-                                    </li>
-                                    {% endfor %}
-                                </ul>
-                            </div>
+                    <div style="display: flex; justify-content: flex-end;">
+                        <ul class="nav" style="list-style-type: none; padding: 0;">
+                            {% for category in categories %}
+                            <li style="display: inline-block; margin-left: 50px;">
+                                <a class="nav-link" href="{{ category.get_absolute_url }}">{{ category.name }}</a>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
                 </ul>
             </div>
         </nav>

@@ -34,7 +34,7 @@ def signup(request):
             return redirect('market:home')
     else:
         form = UserForm()
-    return render(request, 'user/signup.html', {'form': form})
+    return render(request, 'user/login.html', {'form': form})
 
 def profile(request):
     try:

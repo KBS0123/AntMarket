@@ -164,6 +164,7 @@
       text-align:center;
     }
     </style>
+{% include "user/form_errors.html" %}
 <div class="login-wrap">
   <div class="login-html">
     <input id="tab-1" type="radio" name="tab" class="sign-in" checked><label for="tab-1" class="tab">Sign In</label>
@@ -193,7 +194,6 @@
       <div class="sign-up-htm">
           <form method="post" action="{% url 'user:signup' %}" enctype="multipart/form-data">
                 {% csrf_token %}
-              {% include "user/form_errors.html" %}
         <div class="group">
           <label for="username" class="label">ID</label>
           <input id="username" type="text" class="input"
@@ -240,6 +240,5 @@
      <p class="m-0 text-center text-white">Copyright &copy; team 27.5</p>
   </div>
 </footer>
-
 
 {% endblock %}
