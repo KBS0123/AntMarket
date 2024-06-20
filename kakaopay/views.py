@@ -28,8 +28,8 @@ def index(request):
             "total_amount": total_amount,        # 구매 물품 가격
             "tax_free_amount": "0",         # 구매 물품 비과세
             "approval_url": "http://127.0.0.1:8000/kakaopay/success/",
-            "cancel_url": "http://127.0.0.1:8000/",
-            "fail_url": "http://127.0.0.1:8000/",
+            "cancel_url": "http://127.0.0.1:8000/cart/",
+            "fail_url": "http://127.0.0.1:8000/cart/",
         }
 
         res = requests.post(url, headers=headers, data=data)
