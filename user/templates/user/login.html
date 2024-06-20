@@ -13,8 +13,9 @@
 </head>
 
   <style type="text/css">
-        body{
-      margin:0;
+       body{
+      margin: 0;
+      padding: 0;
       color:#B67356;
       background:#EABEAB;
       font:400 16px/18px 'Open Sans',sans-serif;
@@ -28,7 +29,7 @@
       width:100%;
       margin:auto;
       max-width:525px;
-      min-height:670px;
+      min-height:680px;
       position:relative;
       background:#E8AD92 no-repeat center;
       box-shadow:0 12px 15px 0 rgba(0,0,0,.24),0 17px 50px 0 rgba(0,0,0,.19);
@@ -189,10 +190,10 @@
           </form>
         <div class="hr"></div>
         <a href="{% provider_login_url 'kakao' %}">
-            <img src="{% static 'img/kakao_login.png' %}" alt="...">
+            <img src="{% static 'img/kakao_login.png' %}" alt="..." height="45" width="180" style="margin-left:10px;">
           </a>
         <a href="{% url 'social:begin' 'naver' %}">
-             <img src="{% static 'img/naver_login.png' %}" alt="..." height="45" width="180" style="border-radius: 5px;">
+             <img src="{% static 'img/naver_login.png' %}" alt="..." height="45" width="180" style="border-radius: 6.5px;">
         </a>
         <a href="{% url 'social:begin' 'google-oauth2' %}" class="d-flex justify-content-center">
             <img src="{% static 'img/google_login.png' %}" alt="Google Login" style="margin-top: 10px;">
@@ -242,9 +243,9 @@
 </div>
 
 <!-- Footer -->
-<footer class="py-5 bg-dark">
+<footer class="py-5 bg-light">
   <div class="container">
-     <p class="m-0 text-center text-white">Copyright &copy; team 27.5</p>
+     <p class="m-0 text-center text-black">Copyright &copy; team 27.5</p>
   </div>
 </footer>
 
