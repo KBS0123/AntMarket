@@ -6,16 +6,23 @@
 
 {% block content %}
 <style>
-    .chat-room-list {
-        font-family: 'Arial', sans-serif;
-        background-color: #e8f5e9; /* 연한 녹색 배경으로 변경 */
-        color: #333;
+    body {
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
         margin: 0;
+    }
+
+    .chat-room-list {
+        flex: 1;
+        font-family: 'Arial', sans-serif;
+        background-color: #DDBBAA;
+        color: #8c6b68; /* 텍스트 색상 변경 */
         padding: 20px 0;
     }
 
     .chat-room-list h1 {
-        color: #66bb6a; /* 밝은 녹색 텍스트 색상으로 변경 */
+        color: #8c6b68; /* 텍스트 색상 변경 */
         text-align: center;
         margin-top: 20px;
         font-size: 2.5em;
@@ -46,7 +53,7 @@
 
     .chat-room-list a {
         text-decoration: none;
-        color: #66bb6a; /* 밝은 녹색 텍스트 색상으로 변경 */
+        color: #8c6b68; /* 텍스트 색상 변경 */
         font-weight: bold;
     }
 
@@ -54,12 +61,18 @@
         text-decoration: underline;
     }
 
+    .text {
+        color: #8c6b68; /* 텍스트 색상 변경 */
+    }
+
     footer {
         background-color: #66bb6a; /* 밝은 녹색 배경으로 변경 */
         color: #fff;
         text-align: center;
-        padding: 10px 0;
-        margin-top: 20px;
+        padding: 50px 0; /* 패딩을 20px로 늘림 */
+
+        width: 100%; /* 가로 폭을 100%로 설정 */
+        box-sizing: border-box; /* 패딩과 보더를 포함한 전체 폭을 설정 */
     }
 
     footer p {
@@ -78,9 +91,9 @@
     </ul>
 </div>
 <!-- Footer -->
-<footer>
+<footer class="py-5 bg-light">
     <div class="container">
-        <p>Copyright &copy; team 27.5</p>
+        <p class="m-0 text-center text-black">Copyright &copy; team 27.5</p>
     </div>
 </footer>
 {% endblock %}
