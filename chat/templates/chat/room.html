@@ -3,40 +3,135 @@
 <head>
     <meta charset="UTF-8">
     <title>채팅방</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- jQuery (Bootstrap JavaScript plugins depend on it) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <!-- Bootstrap JS -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <style>
-        #chat-log {
-            border: 1px solid black;
-            width: 400px;
-            height: 400px;
-            overflow: auto;
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        .chat-wrap {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #f2f2f2;
+        }
+
+        .chat-wrap-content {
+            max-width: 600px;
+            width: 100%;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .chat-wrap .header {
+            font-size: 14px;
+            padding: 15px 0;
+            background: #9f7b6f;
+            color: white;
+            text-align: center;
+        }
+
+        .chat-wrap .chat {
+            padding-bottom: 80px;
+        }
+
+        .chat-wrap .chat ul {
+            width: 100%;
+            list-style: none;
+        }
+
+        .chat-wrap .chat ul li {
+            width: 100%;
+        }
+
+        .chat-wrap .chat ul li.left {
+            text-align: left;
+        }
+
+        .chat-wrap .chat ul li.right {
+            text-align: right;
+        }
+
+        .chat-wrap .chat ul li > div {
+            font-size: 13px;
+        }
+
+        .chat-wrap .chat ul li > div.sender {
+            margin: 10px 20px 0 20px;
+            font-weight: bold;
+        }
+
+        .chat-wrap .chat ul li > div.message {
+            display: inline-block;
+            word-break: break-all;
+            margin: 5px 20px;
+            max-width: 75%;
+            border: 1px solid #888;
             padding: 10px;
+            border-radius: 5px;
+            background-color: #FCFCFC;
+            color: #555;
+            text-align: left;
         }
-        #chat-log div {
-            margin-bottom: 10px;
+
+        .chat-wrap .input-div {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background-color: #FFF;
+            text-align: center;
+            border-top: 1px solid #F18C7E;
+            padding: 10px; /* 추가된 패딩 */
         }
-        #chat-log img {
-            max-width: 200px;
-            display: block;
-            margin-top: 5px;
+
+        .chat-wrap .input-div > textarea {
+            width: calc(100% - 20px); /* 패딩을 고려한 너비 계산 */
+            height: 150px; /* 세로 크기 조정 */
+            border: none;
+            padding: 10px;
+            margin-bottom: 10px; /* 추가된 마진 */
+            resize: none; /* 사용자 크기 조정 비활성화 */
         }
     </style>
 </head>
 <body>
-    <h1>채팅방: {{ room_name }}</h1>
-    <div id="chat-log">
-        {% for message in messages %}
-        <div>
-            <b>{{ message.timestamp }} {{ message.user.username }}</b> {{ message.message }}
-            {% if message.image %}
-                <br><img src="{{ message.image.url }}" alt="메시지 이미지">
-            {% endif %}
+    <div class="chat-wrap">
+        <div class="chat-wrap-content">
+            <h1 class="header">채팅방: {{ room_name }}</h1>
+            <div id="chat-log">
+                {% for message in messages %}
+                <div>
+                    <b>{{ message.timestamp }} {{ message.user.username }}</b> {{ message.message }}
+                    {% if message.image %}
+                        <br><img src="{{ message.image.url }}" alt="메시지 이미지">
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+            <form>
+                <div class="form-group">
+                    <textarea id="chat-message-input" class="form-control" placeholder="메시지를 입력하세요"></textarea>
+                </div>
+                <button id="chat-message-submit" type="button" class="btn btn-outline-dark">전송</button>
+                <div class="form-group">
+                    <input type="file" class="form-control-file" id="chat-image-input">
+                </div>
+                <button id="back-to-list" type="button" class="btn btn-outline-dark">채팅 목록으로 돌아가기</button>
+                <a href="{% url 'market:home' %}" class="btn btn-outline-dark">메인으로</a>
+
+
+            </form>
         </div>
-        {% endfor %}
     </div>
-    <input id="chat-message-input" type="text" size="100" placeholder="메시지를 입력하세요">
-    <input id="chat-message-submit" type="button" value="전송">
-    <input type="file" id="chat-image-input">
-    <button id="back-to-list">채팅 목록으로 돌아가기</button> <!-- 추가된 버튼 -->
 
     <script>
         const roomName = "{{ room_name|escapejs }}";

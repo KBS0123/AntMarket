@@ -192,10 +192,10 @@
             <img src="{% static 'img/kakao_login.png' %}" alt="...">
           </a>
         <a href="{% url 'social:begin' 'naver' %}">
-             <img src="{% static 'img/naver_login.png' %}" alt="...">
+             <img src="{% static 'img/naver_login.png' %}" alt="..." height="45" width="180" style="border-radius: 5px;">
         </a>
-        <a href="{% url 'social:begin' 'google-oauth2' %}">
-            <img src="{% static 'img/google_login.png' %}" alt="...">
+        <a href="{% url 'social:begin' 'google-oauth2' %}" class="d-flex justify-content-center">
+            <img src="{% static 'img/google_login.png' %}" alt="Google Login" style="margin-top: 10px;">
         </a>
         <div class="foot-lnk">
         </div>
@@ -235,8 +235,6 @@
           <input type="submit" class="button" value="Sign Up">
         </div>
         </form>
-        <div class="hr"></div>
-        <div class="foot-lnk">
         </div>
       </div>
     </div>

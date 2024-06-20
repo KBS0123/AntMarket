@@ -49,23 +49,35 @@
         min-width: 5rem; /* 너비 조정 */
     }
 
-    /* 햄버거 메뉴 스타일 */
     .dropdown-menu {
-        min-width: 1.5rem; /* 햄버거 메뉴 너비 */
-    }
-    .dropdown-menu a.dropdown-item,
-    .dropdown-menu button.dropdown-item {
-        width: 25px;
-        padding: 0.5rem;/* 드롭다운 아이템의 패딩 조정 */
-        font-size: 1.3rem; /* 드롭다운 아이템의 글꼴 크기 조정 */
-        background-color: transparent; /* 호버 배경색 제거 */
+        width: 200px; /* 드롭다운 메뉴 전체 너비 */
+        min-width: 120px; /* 최소 너비 설정 */
     }
 
+    .dropdown-menu a.dropdown-item,
+    .dropdown-menu button.dropdown-item {
+        display: block; /* 블록 요소로 변경 */
+        width: 100%; /* 너비 100% 설정 */
+        text-align: center; /* 텍스트 가운데 정렬 */
+        padding: 0.5rem 1rem; /* 패딩 설정 */
+        font-size: 1.3rem; /* 폰트 크기 설정 */
+        margin-left: -120px;
+    }
 
     .add-to-cart-section {
         margin-top: -13rem;
         margin-left: 1.5rem;
      }
+
+     .add-to-cart-section button span {
+        font-size: 0.9rem; /* 원하는 크기로 설정 */
+    }
+
+     .custom-search {
+        position: absolute;
+        top: 10px; /* 상단 여백 조정 */
+        right: 10px; /* 우측 여백 조정 */
+    }
 
 </style>
 <body>
@@ -90,23 +102,24 @@
                         <div class="d-flex mb-2">
                             {% if user.is_authenticated %}
                                 <a href="{% url 'chat:room' product.name %}"
-                                   class="btn btn-outline-dark d-flex align-items-center justify-content-center" style="height: 3.5rem; width: 5rem;">채팅</a>
+                                   class="btn btn-outline-dark d-flex align-items-center justify-content-center" style="height: 3.5rem; width: 6rem;">채팅</a>
                             {% endif %}
                             <!--드롭다운-->
                             <div class="dropdown">
                                 <button class="btn btn-outline-dark dropdown-toggle" type="button" id="dropdownMenuButton"
-                                        data-bs-toggle="dropdown" aria-expanded="false" style="height: 3.5rem; width: 5rem; margin-left: 1rem;">
+                                        data-bs-toggle="dropdown" aria-expanded="false" style="height: 3.5rem; width: 6rem; margin-left: 1.5rem;">
                                     {{ product.user.username }}
                                 </button>
                                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                     {% if user.is_authenticated %}
                                         {% if product.user.username == user.username %}
-                                            <li><a class="dropdown-item" href="{{ product.get_update_url }}">수정</a></li>
+                                            <li><a class="dropdown-item text-center" href="{{ product.get_update_url }}">수정</a></li>
                                             <li><button id="delete-button" class="dropdown-item">삭제</button></li>
                                         {% endif %}
                                     {% endif %}
                                 </ul>
                             </div>
+                            <!--드롭다운-->
                         </div>
                     </div>
                 </div>
@@ -115,7 +128,6 @@
     </div>
 </section>
 
-    <!-- Add to cart section -->
 <!-- Add to cart section -->
 <section class="py-3 add-to-cart-section">
     <div class="container">
@@ -125,15 +137,15 @@
                     <input type="hidden" name="quantity" value="1">
                     <input type="hidden" name="override" value="False">
                     {% csrf_token %}
-                    <button type="submit" class="btn btn-outline-dark d-flex align-items-center" style="height: 5rem; min-width: 15rem; position: relative; left:-20px;">
-                        <span style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">Add To Cart</span>
+                    <button type="submit" class="btn btn-outline-dark d-flex align-items-center" style="height: 5rem; min-width: 15rem; position: relative; left:-20px; margin-top:-20px;">
+                        <span style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 1.3rem;">Add To Cart</span>
                     </button>
                 </form>
             </div>
         </div>
     </div>
 </section>
-
+<!-- Add to cart section -->
 
 
     <!-- Map section -->

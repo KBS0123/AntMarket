@@ -63,21 +63,6 @@
             margin-bottom: 20px;
         }
 
-        /* 버튼 스타일 */
-        .btn {
-            background-color: #000;
-            color: #fff;
-            padding: 10px 20px;
-            border: none;
-            cursor: pointer;
-            font-size: 16px;
-            border-radius: 5px;
-            margin-top: 10px;
-        }
-
-        .btn:hover {
-            background-color: #333; /* 마우스 호버 시 배경색 조정 */
-        }
     </style>
 <div class="content-container">
     <div class="content">
@@ -88,9 +73,9 @@
                 {% static 'img/no_image.png' %}
               {% endif %}" class="profile-image" width="150">
     <p>{{ user.email }}</p>
-    <a href="{% url 'user:my_products' %}" class="btn">내가 올린 글</a>
+    <a href="{% url 'user:my_products' %}" class="btn btn-outline-dark" style="margin-bottom:15px;">내가 올린 글</a>
     <br>
-    <button id="delete-account" class="btn btn-danger">회원탈퇴</button>
+    <button id="delete-account" class="btn btn-outline-dark">회원탈퇴</button>
     <form id="delete-form" method="post" action="{% url 'user:delete' %}" style="display:none;">
         {% csrf_token %}
     </form>
@@ -101,5 +86,8 @@ document.getElementById('delete-account').addEventListener('click', function() {
     }
 });
 </script>
+
+
+
 {% endblock %}
 

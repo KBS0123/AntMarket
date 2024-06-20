@@ -31,9 +31,10 @@
     </h1>
     <div class="card-footer p-4 pt-0 border-top-0 bg-transparent text-center">
         {% if user.is_authenticated %}
-            <a class="btn btn-outline-dark" href="{{ category.get_create_url }}">
+            <a class="btn btn-outline-dark" href="{{ category.get_create_url }}" style="margin-bottom: -5px;">
                 {{ category.name }} 제품 등록
             </a>
+        {{ product.description|linebreaks }}
         {% endif %}
         {% for minicategory in minicategories %}
         <a class="btn btn-outline-dark mt-auto" href="{% url 'market:product_list_filtered' category.slug minicategory.slug %}" style="display: inline-block; text-align: center;">
