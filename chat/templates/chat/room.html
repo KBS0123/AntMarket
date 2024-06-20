@@ -36,6 +36,7 @@
     <input id="chat-message-input" type="text" size="100" placeholder="메시지를 입력하세요">
     <input id="chat-message-submit" type="button" value="전송">
     <input type="file" id="chat-image-input">
+    <button id="back-to-list">채팅 목록으로 돌아가기</button> <!-- 추가된 버튼 -->
 
     <script>
         const roomName = "{{ room_name|escapejs }}";
@@ -102,6 +103,11 @@
                 e.target.value = '';  // 입력 필드 지우기
             };
             reader.readAsDataURL(file);
+        };
+
+        // 추가된 버튼 클릭 이벤트 처리
+        document.getElementById('back-to-list').onclick = function() {
+            window.location.href = '/chat/list';
         };
     </script>
 </body>

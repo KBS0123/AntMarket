@@ -1,4 +1,3 @@
-# chat/views.py
 from django.contrib.auth.models import User
 from django.shortcuts import render, get_object_or_404
 from django.http import JsonResponse
@@ -8,12 +7,18 @@ from .models import Message
 from .forms import MessageForm
 
 @login_required
-def room(request, room_name, seller_id, user_id):
+def chat_list(request):
     user = request.user
-    if user.id != user_id:
-        return JsonResponse({'error': '잘못된 사용자 접근입니다.'}, status=403)
+    rooms = Message.objects.filter(user=user).values('room_name').distinct()
 
-    seller = get_object_or_404(User, id=seller_id)
+    return render(request, 'chat/chat_list.html', {
+        'rooms': rooms,
+        'user': user,
+    })
+
+@login_required
+def room(request, room_name):
+    user = request.user
 
     if request.method == 'POST':
         form = MessageForm(request.POST, request.FILES)
@@ -31,6 +36,5 @@ def room(request, room_name, seller_id, user_id):
     return render(request, 'chat/room.html', {
         'room_name': room_name,
         'messages': messages,
-        'seller': seller,
         'form': MessageForm(initial={'room_name': room_name}),
     })
