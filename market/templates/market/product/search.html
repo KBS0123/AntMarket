@@ -1,31 +1,80 @@
 {% extends 'market/base.html' %}
 {% load static %}
 {% block title %}
-    kw
+    {{ kw }}
 {% endblock %}
 {% block content %}
-    <div id="main" class="products-list">
-        <h1>
-            Products
-        </h1>
-        {% if products %}
-            {% for product in products %}
-                <div class="item">
-                    <a href="{{ product.get_absolute_url }}">
-                        <img src="{% if product.image %}
-                                    {{ product.image.url }}
-                                  {% else %}
-                                    {% static 'img/no_image.png' %}
-                                  {% endif %}">
-                    </a>
-                    <br/>
-                        <a href="{{ product.get_absolute_url }}">{{ product.name }}</a>
-                    <br/>
-                    {{ product.price }}원
+<head>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@700&family=Noto+Serif+KR:wght@200..900&display=swap" rel="stylesheet">
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard-dynamic-subset.min.css" />
+</head>
+<style type="text/css">
+    body {
+        background-color: #DDBBAA;
+    }
+    .centered {
+        text-align: center;
+        margin-top: 50px;
+        font-weight: bold;
+    }
+
+    .text {
+        color: #8c6b68;
+    }
+</style>
+
+<div class="container mt-5">
+    <h1 class="centered text">
+        "{{ kw }}" 검색 결과
+    </h1>
+    {% if products %}
+        <section class="py-5">
+            <div class="container px-4 px-lg-5 mt-5">
+                <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+                    {% for product in products %}
+                        <div class="col mb-5">
+                            <div class="card h-100">
+                                <!-- Product image-->
+                                <img class="card-img-top" src="{% if product.image %}{{ product.image.url }}{% else %}{% static 'img/no_image.png' %}{% endif %}" alt="..." />
+                                <!-- Product details-->
+                                <div class="card-body p-4">
+                                    <div class="text-center">
+                                        <!-- Product name-->
+                                        <h5 class="fw-bolder">{{ product.name }}</h5>
+                                        <!-- Product price-->
+                                        {{ product.price }}원
+                                    </div>
+                                </div>
+                                <!-- Product actions-->
+                                <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                                    <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="{{ product.get_absolute_url }}">상세보기</a></div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
                 </div>
-            {% endfor %}
-        {% else %}
-            <h2>제품이 없습니다.</h2>
-        {% endif %}
+            </div>
+        </section>
+    {% else %}
+        <h2 class="centered text">
+            제품이 없습니다.
+        </h2>
+    {% endif %}
+</div>
+<!-- Footer-->
+<footer class="py-5 bg-light">
+    <div class="container">
+        <p class="m-0 text-center text-black">Copyright &copy; team 27.5</p>
     </div>
+</footer>
+
+<script type="text/javascript">
+    const btn_search = document.getElementById('btn-search');
+    btn_search.addEventListener('click', function(){
+        document.getElementById('kw').value = document.getElementById('search_kw').value;
+        document.getElementById('searchForm').submit();
+    });
+</script>
 {% endblock %}

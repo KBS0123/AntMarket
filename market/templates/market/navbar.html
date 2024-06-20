@@ -87,12 +87,18 @@
         <!--navbar-->
         <nav class="navbar">
             <div class="cl-effect-1 px-40 px-lg-5">
-                <a href="#" class="navbar-brand d-flex align-items-center">
-                    <a href="{% url 'market:home' %}">
-                        <img src="{% static 'img/Ant Market No Bg.png' %}"
-                             height="100" width="210" style="margin: 2px 5px 8px 5px">
-                    </a>
+                <a href="{% url 'market:home' %}">
+                    <img src="{% static 'img/Ant Market No Bg.png' %}"
+                         height="100" width="210" style="margin: 2px 5px 8px 5px">
                 </a>
+                <div class="col-6">
+                    <div class="input-group">
+                        <input type="text" id="search_kw" class="form-control" value="{{ kw|default_if_none:'' }}">
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-secondary" type="button" id="btn-search">찾기</button>
+                        </div>
+                    </div>
+                </div>
                 <ul class="nav justify-content-center">
                     <li class="nav-item">
                         {% if user.is_authenticated %}
@@ -133,5 +139,8 @@
                     </form>
                 </div>
             </div>
+            <form id="searchForm" method="get" action="{% url 'market:search' %}">
+                <input type="hidden" id="kw" name="kw" value="{{ kw|default_if_none:'' }}">
+            </form>
         </nav>
 
