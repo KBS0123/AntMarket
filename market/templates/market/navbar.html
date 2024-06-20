@@ -10,9 +10,9 @@
 
 <style type="text/css">
     .navbar{
-       display: flex; !important;
-       justify-content: space-between; !important;
-       background-color:#FFFFFF; !important;
+       display: flex !important;
+       justify-content: space-between !important;
+       background-color:#FFFFFF !important;
     }
     nav a {
         position: center;
@@ -39,7 +39,6 @@
       font-weight: 700;
       font-style: normal;
     }
-
 
     li{
         font-family: "Nanum Myeongjo", serif;
@@ -98,6 +97,8 @@
                         {% if user.is_authenticated %}
                             <a class="nav-link" href="{% url 'user:profile' %}">{{user.username}}</a>
                             <a class="nav-link" href="{% url 'user:logout' %}">로그아웃</a>
+                            <!-- chat_list.html로 이동하는 버튼 추가 -->
+                            <a class="nav-link" href="{% url 'chat:list' %}">채팅</a>
                         {% else %}
                             <a class="nav-link" href="{% url 'user:login' %}">Login</a>
                         {% endif %}
@@ -134,4 +135,3 @@
                 </div>
             </div>
         </nav>
-
