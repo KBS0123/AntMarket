@@ -5,12 +5,95 @@
 {% endblock %}
 
 {% block content %}
-<h1>채팅방 목록</h1>
-<ul>
-    {% for room in rooms %}
-        <li>
-            <a href="{% url 'chat:room' room.room_name %}">{{ room.room_name }}</a>
-        </li>
-    {% endfor %}
-</ul>
+<style>
+    body {
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+        margin: 0;
+    }
+
+    .chat-room-list {
+        flex: 1;
+        font-family: 'Arial', sans-serif;
+        background-color: #DDBBAA;
+        color: #8c6b68; /* 텍스트 색상 변경 */
+        padding: 20px 0;
+    }
+
+    .chat-room-list h1 {
+        color: #8c6b68; /* 텍스트 색상 변경 */
+        text-align: center;
+        margin-top: 20px;
+        font-size: 2.5em;
+    }
+
+    .chat-room-list ul {
+        list-style-type: none;
+        padding: 0;
+        max-width: 600px;
+        margin: 0 auto;
+    }
+
+    .chat-room-list li {
+        background-color: #fff;
+        border: 1px solid #c8e6c9; /* 연한 녹색 테두리로 변경 */
+        border-radius: 8px;
+        margin: 10px 0;
+        padding: 15px;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .chat-room-list li:hover {
+        background-color: #f1f8e9; /* 연한 초록색 배경으로 변경 */
+        border-color: #66bb6a; /* 밝은 녹색 테두리로 변경 */
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    }
+
+    .chat-room-list a {
+        text-decoration: none;
+        color: #8c6b68; /* 텍스트 색상 변경 */
+        font-weight: bold;
+    }
+
+    .chat-room-list a:hover {
+        text-decoration: underline;
+    }
+
+    .text {
+        color: #8c6b68; /* 텍스트 색상 변경 */
+    }
+
+    footer {
+        background-color: #66bb6a; /* 밝은 녹색 배경으로 변경 */
+        color: #fff;
+        text-align: center;
+        padding: 50px 0; /* 패딩을 20px로 늘림 */
+
+        width: 100%; /* 가로 폭을 100%로 설정 */
+        box-sizing: border-box; /* 패딩과 보더를 포함한 전체 폭을 설정 */
+    }
+
+    footer p {
+        margin: 0;
+    }
+</style>
+
+<div class="chat-room-list">
+    <h1>채팅방 목록</h1>
+    <ul>
+        {% for room in rooms %}
+            <li>
+                <a href="{% url 'chat:room' room.room_name %}">{{ room.room_name }}</a>
+            </li>
+        {% endfor %}
+    </ul>
+</div>
+<!-- Footer -->
+<footer class="py-5 bg-light">
+    <div class="container">
+        <p class="m-0 text-center text-black">Copyright &copy; team 27.5</p>
+    </div>
+</footer>
 {% endblock %}

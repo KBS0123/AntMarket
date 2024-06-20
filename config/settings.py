@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
     'allauth.socialaccount.providers.kakao',
     'kakaopay.apps.KakaopayConfig',
+    'django_extensions',
 ]
 
 MIDDLEWARE = [
@@ -78,6 +79,10 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'config.wsgi.application'
 
+GRAPH_MODELS = {
+  'all_applications': True,
+  'group_models': True,
+}
 
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
