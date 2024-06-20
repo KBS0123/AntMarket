@@ -14,7 +14,7 @@
 
 <style type="text/css">
     body {
-        background-color: #5d4d45;
+        background-color: #a27971;
         font-family: 'Pretendard';
         color: #fff;
         margin: 0;
@@ -184,7 +184,7 @@
     <input type="hidden" name="quantity" value="{{ cart|length }}">
     <input type="hidden" name="total_amount" value="{{ cart.get_total_price }}">
     <button type="submit" id="kakaopayBtn">
-        <img src="{% static 'img/kakaopay_button.png' %}" alt="kakaopay_button">
+        <img src="{% static 'img/kakaopay_button.png' %}" alt="kakaopay_button" height="50" width="100">
     </button>
 </form>
 

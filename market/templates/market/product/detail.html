@@ -47,6 +47,12 @@
         margin-left: 1rem; /* 버튼 사이 간격 조정 */
         height: 3.5rem; /* 높이 조정 */
         min-width: 5rem; /* 너비 조정 */
+        font-size: 1.3rem; /* 버튼 텍스트 크기 조정 */
+        font-weight: 700;
+        color: #9e6c5b;
+        word-spacing: 0.5rem; /* 어간 간격 조정 */
+        padding: 0.5rem 1rem; /* 패딩 조정 */
+        white-space: nowrap; /* 텍스트 줄바꿈 방지 */
     }
 
     /* 햄버거 메뉴 스타일 */
@@ -90,12 +96,12 @@
                         <div class="d-flex mb-2">
                             {% if user.is_authenticated %}
                                 <a href="{% url 'chat:room' product.name product.user.id request.user.id %}"
-                                   class="btn btn-outline-dark d-flex align-items-center justify-content-center" style="height: 3.5rem; width: 5rem;">채팅</a>
+                                   class="btn btn-outline-dark d-flex align-items-center justify-content-center" style="height: 3rem; width: 5rem;">채팅</a>
                             {% endif %}
                             <!--드롭다운-->
                             <div class="dropdown">
                                 <button class="btn btn-outline-dark dropdown-toggle" type="button" id="dropdownMenuButton"
-                                        data-bs-toggle="dropdown" aria-expanded="false" style="height: 3.5rem; width: 5rem; margin-left: 1rem;">
+                                        data-bs-toggle="dropdown" aria-expanded="false" style="height: 3rem; width: 5rem; margin-left: 1rem;">
                                     {{ product.user.username }}
                                 </button>
                                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">

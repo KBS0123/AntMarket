@@ -4,8 +4,78 @@
     Ant Market
 {% endblock %}
 {% block content %}
-    <!--캐러셀 슬라이드-->
-     <!--슬라이더-->
+<meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@700&family=Noto+Serif+KR:wght@200..900&display=swap" rel="stylesheet">
+
+
+<style type="text/css">
+    /* h1 style */
+    body {
+        background-color: #845f51;
+        margin: 0;
+        padding: 0;
+        min-height: 100vh; /* 최소 높이를 화면 높이로 설정 */
+        display: flex;
+        flex-direction: column; /* 화면을 수직으로 나열 */
+    }
+
+    .content {
+        flex: 1; /* 나머지 공간을 차지 */
+    }
+
+    h1 {
+       text-align: center; /* 중앙 정렬 */
+       font-family: 'Nanum Myeongjo', serif; /* Google Font 폰트 변경 */
+       font-size: 3em; /* 폰트 크기 조정 */
+       color: #333; /* 폰트 색상 변경 (필요에 따라) */
+    }
+
+    hr {
+      height: 2px;
+      overflow: visible;
+      color: #999;
+      position: relative;
+      margin: 1em auto; /* 간격을 좁히기 위해 margin 조정 */
+    }
+
+    hr::before {
+      content: "";
+      background: linear-gradient(to right, transparent, currentColor, transparent);
+      height: 2px;
+      width: 100%;
+      position: absolute;
+      left: 0;
+    }
+
+    hr[data-content] {
+      text-align: center;
+      margin-top: 1.5em; /* 요소 전체 아래 이동 */
+    }
+
+    hr[data-content]::after {
+      content: attr(data-content);
+      position: relative;
+      background: #845f51;
+      padding: 0 1.5rem;
+      top: -0.5em;
+      font-size: 3em;
+      line-height: 1;
+      font-family: serif;
+      font-style: italic;
+      color: currentColor;
+    }
+</style>
+<!--title-->
+<h1 style="margin-top:40px; color:#e8d8d3;"><em>Antique</em></h1>
+<article class="container">
+  <header>
+     <hr data-content="&amp;" />
+  </header>
+<h1 style="margin-top:25px; margin-bottom:-30px; color:#f4e7e0;"><em>Trade</em></h1>
+<!--title-->
+
+    <!--캐러셀 슬라이드 css-->
         <style>
           .pics {      /* 전체 케러셀 */
             width: 10px;
@@ -37,6 +107,8 @@
         }
 
         </style>
+    <!--캐러셀 슬라이드 css-->
+    <!--슬라이더-->
        <head>
          <meta charset="UTF-8" />
          <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -87,7 +159,7 @@
 
         <style type="text/css">
             body {
-                background-color: #966754;
+                background-color: #845f51;
                 }
 
 
@@ -136,9 +208,9 @@
         <input type="hidden" id="kw" name="kw" value="{{ kw|default_if_none:'' }}">
     </form>
 <!-- Footer -->
-    <footer class="py-5 bg-dark">
+    <footer class="py-5 bg-light">
         <div class="container">
-            <p class="m-0 text-center text-white">Copyright &copy; team 27.5</p>
+            <p class="m-0 text-center text-black">Copyright &copy; team 27.5</p>
         </div>
     </footer>
 {% endblock %}
