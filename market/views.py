@@ -2,6 +2,8 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from django.db.models import Q
+
+from cart.cart import Cart
 from cart.forms import CartAddProductForm
 from .models import Category, MiniCategory, Product
 from .forms import ProductForm
@@ -115,5 +117,7 @@ def product_update(request, category_slug, minicategory_slug, id):
 @require_POST
 def product_delete(request, category_slug, minicategory_slug, id):
     product = get_object_or_404(Product, category__slug=category_slug, minicategory__slug=minicategory_slug, id=id)
+    cart = Cart(request)
+    cart.remove_product_by_id(product.id)
     product.delete()
     return JsonResponse({'message': 'Product deleted successfully'}, status=200)
