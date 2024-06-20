@@ -32,6 +32,13 @@
 <!-- 자바스크립트 -->
 {% block script %}
 {% endblock %}
+<script type="text/javascript">
+    const btn_search = document.getElementById('btn-search');
+    btn_search.addEventListener('click', function(){
+        document.getElementById('kw').value = document.getElementById('search_kw').value;
+        document.getElementById('searchForm').submit();
+    });
+</script>
 
 </body>
 </html>
