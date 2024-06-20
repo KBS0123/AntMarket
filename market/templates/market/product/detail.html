@@ -89,7 +89,7 @@
                     <div class="d-flex flex-column">
                         <div class="d-flex mb-2">
                             {% if user.is_authenticated %}
-                                <a href="{% url 'chat:room' product.name product.user.id request.user.id %}"
+                                <a href="{% url 'chat:room' product.name %}"
                                    class="btn btn-outline-dark d-flex align-items-center justify-content-center" style="height: 3.5rem; width: 5rem;">채팅</a>
                             {% endif %}
                             <!--드롭다운-->
