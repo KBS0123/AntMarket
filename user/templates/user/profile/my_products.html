@@ -1,44 +1,73 @@
-{% extends "market/base.html" %}
-
+{% extends 'market/base.html' %}
 {% load static %}
-
 {% block title %}
     내가 올린 글
 {% endblock %}
-
 {% block content %}
-    <h1>내가 올린 글</h1>
+<head>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@700&family=Noto+Serif+KR:wght@200..900&display=swap" rel="stylesheet">
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard-dynamic-subset.min.css" />
+</head>
+<style type="text/css">
+    body {
+        background-color: #DDBBAA;
+    }
+    .centered {
+        text-align: center;
+        margin-top: 50px;
+        font-weight: bold;
+    }
 
-    <!-- 카테고리 선택 -->
-    <form action="{% url 'user:my_products' %}" method="get">
-        <label for="category">카테고리:</label>
-        <select name="category" id="category">
-            <option value="">전체</option>
-            {% for category in categories %}
-                <option value="{{ category.id }}"
-                    {% if selected_category == category.id %} selected {% endif %}>
-                    {{ category.name }}
-                </option>
-            {% endfor %}
-        </select>
-        <button type="submit">확인</button>
-    </form>
+    .text {
+        color: #8c6b68;
+    }
+</style>
 
-    <!-- 제품 목록 -->
-    <div class="product-list">
-        {% for product in products %}
-            <div class="product-item">
-                {% if product.image %}
-                    <img src="{{ product.image.url }}" alt="{{ product.name }}" width="150">
-                {% else %}
-                    <p>No image available</p>
-                {% endif %}
-                <h3>{{ product.name }}</h3>
-                <p>카테고리: {{ product.category.name }} / {{ product.minicategory.name }}</p>
-                <p>가격: {{ product.price }}원</p>
-            </div>
-        {% empty %}
-            <p>등록된 제품이 없습니다.</p>
+<div class="container mt-5">
+    <h1 class="centered text">
+        내가 올린 글
+    </h1>
+    <div class="card-footer p-4 pt-0 border-top-0 bg-transparent text-center">
+        {% for category in categories %}
+        <a class="btn btn-outline-dark mt-auto" href="{% url 'user:my_product_list_filtered' category.slug %}" style="display: inline-block; text-align: center;">
+            {{ category.name }}
+        </a>
         {% endfor %}
     </div>
+    <section class="py-5">
+        <div class="container px-4 px-lg-5 mt-5">
+            <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+                {% for product in products %}
+                <div class="col mb-5">
+                    <div class="card h-100">
+                        <!-- Product image-->
+                        <img class="card-img-top" src="{% if product.image %}{{ product.image.url }}{% else %}{% static 'img/no_image.png' %}{% endif %}" alt="..." />
+                        <!-- Product details-->
+                        <div class="card-body p-4">
+                            <div class="text-center">
+                                <!-- Product name-->
+                                <h5 class="fw-bolder">{{ product.name }}</h5>
+                                <!-- Product price-->
+                                {{ product.price }}원
+                            </div>
+                        </div>
+                        <!-- Product actions-->
+                        <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                            <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="{{ product.get_absolute_url }}">상세보기</a></div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+</div>
+<!-- Footer-->
+<footer class="py-5 bg-light">
+    <div class="container">
+        <p class="m-0 text-center text-black">Copyright &copy; team 27.5</p>
+    </div>
+</footer>
 {% endblock %}

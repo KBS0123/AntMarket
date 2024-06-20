@@ -1,6 +1,6 @@
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 
 from market.models import Category, Product
 from user.forms import UserForm
@@ -53,22 +53,20 @@ def profile(request):
     return render(request, 'user/profile.html', {'user_profile': user_profile})
 
 @login_required
-def my_products(request):
+def my_products(request, category_slug=None):
     user = request.user
+    category = None
     products = Product.objects.filter(user=user).order_by('-created')
 
-    # 카테고리 필터링
-    category_id = request.GET.get('category')
-    if category_id:
-        category = Category.objects.get(id=category_id)
-        products = products.filter(category=category)
-
     categories = Category.objects.all()
+    if category_slug:
+        category = get_object_or_404(Category, slug=category_slug)
+        products = products.filter(category=category).order_by('-created')
 
     return render(request, 'user/profile/my_products.html', {
         'products': products,
+        'category': category,
         'categories': categories,
-        'selected_category': int(category_id) if category_id else None,
     })
 
 class UserDeleteView(DeleteView):
