@@ -39,6 +39,13 @@ class Cart:
             del self.cart[product_id]
             self.save()
 
+    def remove_product_by_id(self, product_id):
+        product_id = str(product_id)
+
+        if product_id in self.cart:
+            del self.cart[product_id]
+            self.save()
+
     def __iter__(self):
         # 카트에 있는 Product 인스턴스를 조회해서 카트 아이템에 담는다.
         #__iter__메서드를 사용하면 뷰 및 템플릿에서 카트의 품목을 쉽게 반복할 수 있다.

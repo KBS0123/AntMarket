@@ -193,10 +193,14 @@
 $(document).ready(function() {
     $('#kakaopayForm').submit(function(e) {
         var isLoggedIn = "{{ request.user.is_authenticated }}";
+        var cartIsEmpty = "{{ cart|length }}"; // 장바구니에 있는 아이템 수
 
         if (isLoggedIn !== "True") {
             e.preventDefault();
             window.location.href = '{% url "user:login" %}';
+        } else if (cartIsEmpty == "0") {
+            e.preventDefault();
+            alert('장바구니가 비어있습니다.');
         } else if (!confirm('결제하시겠습니까?')) {
             e.preventDefault();
         }

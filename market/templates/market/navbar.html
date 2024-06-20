@@ -82,6 +82,45 @@
             margin-bottom: 15px;
         }
 
+</style>
+        <!--navbar-->
+        <nav class="navbar">
+            <div class="cl-effect-1 px-40 px-lg-5">
+                <a href="{% url 'market:home' %}">
+                    <img src="{% static 'img/Ant Market No Bg.png' %}"
+                         height="100" width="210" style="margin: 2px 5px 8px 5px">
+                </a>
+                <div class="col-6">
+                    <div class="input-group">
+                        <input type="text" id="search_kw" class="form-control" value="{{ kw|default_if_none:'' }}">
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-secondary" type="button" id="btn-search">찾기</button>
+                        </div>
+                    </div>
+                </div>
+                <ul class="nav justify-content-center">
+                    <li class="nav-item">
+                        {% if user.is_authenticated %}
+                            <a class="nav-link" href="{% url 'user:profile' %}">{{user.username}}</a>
+                            <a class="nav-link" href="{% url 'user:logout' %}">로그아웃</a>
+                        {% else %}
+                            <a class="nav-link" href="{% url 'user:login' %}">Login</a>
+                        {% endif %}
+                    </li>
+                    <div style="display: flex; justify-content: flex-end;">
+                        <ul class="nav" style="list-style-type: none; padding: 0;">
+                            {% for category in categories %}
+                            <li style="display: inline-block; margin-left: 50px;">
+                                <a class="nav-link" href="{{ category.get_absolute_url }}">{{ category.name }}</a>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </ul>
+            </div>
+
+            <div id="subheader">
+                <div class="cart d-flex px-4 mt-4">
     </style>
 </head>
 <body>
@@ -113,7 +152,8 @@
                         {% with total_items=cart|length %}
                             {% if total_items > 0 %}
                                 <button type="submit" class="btn btn-outline-dark">
-                                    Cart: {{ total_items }} item{{ total_items|pluralize }},
+                                    Cart:
+                                    {{ total_items }} item{{ total_items|pluralize }},
                                     {{ cart.get_total_price }}원
                                 </button>
                             {% else %}
@@ -123,6 +163,9 @@
                             {% endif %}
                         {% endwith %}
                     </form>
+            <form id="searchForm" method="get" action="{% url 'market:search' %}">
+                <input type="hidden" id="kw" name="kw" value="{{ kw|default_if_none:'' }}">
+            </form>
                 </li>
             </ul>
         </div>

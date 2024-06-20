@@ -188,6 +188,15 @@
           </div>
           </form>
         <div class="hr"></div>
+        <a href="{% provider_login_url 'kakao' %}">
+            <img src="{% static 'img/kakao_login.png' %}" alt="...">
+          </a>
+        <a href="{% url 'social:begin' 'naver' %}">
+             <img src="{% static 'img/naver_login.png' %}" alt="...">
+        </a>
+        <a href="{% url 'social:begin' 'google-oauth2' %}">
+            <img src="{% static 'img/google_login.png' %}" alt="...">
+        </a>
         <div class="foot-lnk">
         </div>
       </div>

@@ -28,8 +28,8 @@ def index(request):
             "total_amount": total_amount,        # 구매 물품 가격
             "tax_free_amount": "0",         # 구매 물품 비과세
             "approval_url": "http://127.0.0.1:8000/kakaopay/success/",
-            "cancel_url": "http://127.0.0.1:8000/kakaopay/cancel/",
-            "fail_url": "http://127.0.0.1:8000/kakaopay/fail/",
+            "cancel_url": "http://127.0.0.1:8000/cart/",
+            "fail_url": "http://127.0.0.1:8000/cart/",
         }
 
         res = requests.post(url, headers=headers, data=data)
@@ -80,7 +80,7 @@ def success(request):
     return render(request, 'kakaopay/success.html', context)
 
 def cancel(request):
-    return render(request, 'kakaopay/cancel.html')
+    return render(request, 'market/home.html')
 
 def fail(request):
-    return render(request, 'kakaopay/fail.html')
+    return render(request, 'market/home.html')
