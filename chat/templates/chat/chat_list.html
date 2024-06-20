@@ -5,12 +5,64 @@
 {% endblock %}
 
 {% block content %}
-<h1>채팅방 목록</h1>
-<ul>
-    {% for room in rooms %}
-        <li>
-            <a href="{% url 'chat:room' room.room_name %}">{{ room.room_name }}</a>
-        </li>
-    {% endfor %}
-</ul>
+<style>
+    .chat-room-list {
+        font-family: 'Arial', sans-serif;
+        background-color: #f2f2f2;
+        color: #333;
+        margin: 0;
+        padding: 0;
+    }
+
+    .chat-room-list h1 {
+        color: #ff6f61;
+        text-align: center;
+        margin-top: 20px;
+        font-size: 2.5em;
+    }
+
+    .chat-room-list ul {
+        list-style-type: none;
+        padding: 0;
+        max-width: 600px;
+        margin: 0 auto;
+    }
+
+    .chat-room-list li {
+        background-color: #fff;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        margin: 10px 0;
+        padding: 15px;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .chat-room-list li:hover {
+        background-color: #ffefea;
+        border-color: #ff6f61;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    }
+
+    .chat-room-list a {
+        text-decoration: none;
+        color: #ff6f61;
+        font-weight: bold;
+    }
+
+    .chat-room-list a:hover {
+        text-decoration: underline;
+    }
+</style>
+
+<div class="chat-room-list">
+    <h1>채팅방 목록</h1>
+    <ul>
+        {% for room in rooms %}
+            <li>
+                <a href="{% url 'chat:room' room.room_name %}">{{ room.room_name }}</a>
+            </li>
+        {% endfor %}
+    </ul>
+</div>
 {% endblock %}
