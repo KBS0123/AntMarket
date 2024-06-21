@@ -67,8 +67,8 @@
 <div class="content-container">
     <div class="content">
     <h1>Profile</h1>
-    <img src="{% if product.image %}
-                {{ product.image.url }}
+    <img src="{% if user_profile.profile_image %}
+                {{ user_profile.profile_image.url }}
               {% else %}
                 {% static 'img/no_image.png' %}
               {% endif %}" class="profile-image" width="150">

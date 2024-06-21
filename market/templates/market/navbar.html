@@ -168,13 +168,13 @@
                         {% with total_items=cart|length %}
                             {% if total_items > 0 %}
                                 <button type="submit" class="btn btn-outline-dark">
-                                    Cart:
-                                    {{ total_items }} item{{ total_items|pluralize }},
+                                    장바구니:
+                                    {{ total_items }}개 {{ total_items|pluralize }},
                                     {{ cart.get_total_price }}원
                                 </button>
                             {% else %}
                                 <button type="submit" class="btn btn-outline-dark" style="margin-top:100px; position: absolute; right: 20px; top: 0;">
-                                    Your cart is empty.
+                                    장바구니가 비어있습니다.
                                 </button>
                             {% endif %}
                         {% endwith %}
